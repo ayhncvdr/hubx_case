@@ -20,9 +20,16 @@ class SPHelper {
     if (_instance != null) {
       return _instance!;
     }
-    final prefs = await SharedPreferences.getInstance();
-    _instance = SPHelper._(prefs);
-    return _instance!;
+
+    // Double-checked locking to avoid race conditions on first init.
+    return Future.sync(() async {
+      if (_instance != null) {
+        return _instance!;
+      }
+      return Future(() async {
+        return _instance ??= SPHelper._(await SharedPreferences.getInstance());
+      });
+    });
   }
 
   T? get<T>(SPKey key) {

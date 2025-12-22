@@ -12,8 +12,12 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     OnboardingCompleted event,
     Emitter<OnboardingState> emit,
   ) async {
-    final sp = await SPHelper.instance();
-    await sp.set<bool>(SPKey.onboardingCompleted, true);
-    emit(state.copyWith(completed: true));
+    try {
+      final sp = await SPHelper.instance();
+      await sp.set<bool>(SPKey.onboardingCompleted, true);
+      emit(state.copyWith(completed: true));
+    } catch (error) {
+      emit(state.copyWith(completed: false));
+    }
   }
 }
