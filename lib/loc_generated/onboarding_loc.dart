@@ -3,12 +3,21 @@ class OnboardingLocalizationTable {
 
   final String _languageCode;
 
-  String get welcomeTitle {
+  String get welcomeTitlePrefix {
     switch (_languageCode) {
       case 'en':
-        return 'Welcome to PlantApp';
+        return 'Welcome to ';
       default:
         return '';
+    }
+  }
+
+  String get welcomeTitleHighlight {
+    switch (_languageCode) {
+      case 'en':
+        return 'PlantApp';
+      default:
+        return 'PlantApp';
     }
   }
 
@@ -34,6 +43,51 @@ class OnboardingLocalizationTable {
     switch (_languageCode) {
       case 'en':
         return 'By tapping next, you are agreeing to PlantID Terms of Use & Privacy Policy.';
+      default:
+        return '';
+    }
+  }
+
+  String get termsPrefix {
+    switch (_languageCode) {
+      case 'en':
+        return 'By tapping next, you are agreeing to PlantID ';
+      default:
+        return '';
+    }
+  }
+
+  String get termsOfUse {
+    switch (_languageCode) {
+      case 'en':
+        return 'Terms of Use';
+      default:
+        return '';
+    }
+  }
+
+  String get termsMiddle {
+    switch (_languageCode) {
+      case 'en':
+        return ' & ';
+      default:
+        return '';
+    }
+  }
+
+  String get privacyPolicy {
+    switch (_languageCode) {
+      case 'en':
+        return 'Privacy Policy';
+      default:
+        return '';
+    }
+  }
+
+  String get termsSuffix {
+    switch (_languageCode) {
+      case 'en':
+        return '.';
       default:
         return '';
     }

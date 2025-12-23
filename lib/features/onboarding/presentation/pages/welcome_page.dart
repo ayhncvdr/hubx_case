@@ -42,9 +42,19 @@ class WelcomePage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        PlantText(
-                          L.onboarding.welcomeTitle,
-                          style: PlantTextStyles.headline28Regular,
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: L.onboarding.welcomeTitlePrefix,
+                                style: PlantTextStyles.headline28Regular,
+                              ),
+                              TextSpan(
+                                text: L.onboarding.welcomeTitleHighlight,
+                                style: PlantTextStyles.headline28SemiBold,
+                              ),
+                            ],
+                          ),
                         ).paddingOnly(
                           start: PlantSpacing.x20,
                           end: PlantSpacing.x20,
@@ -72,12 +82,32 @@ class WelcomePage extends StatelessWidget {
                   label: L.onboarding.getStarted,
                   onPressed: () {},
                 ).paddingOnly(bottom: PlantSpacing.x16),
-                PlantText(
-                  L.onboarding.terms,
-                  style: PlantTextStyles.body11Regular.copyWith(
-                    color: PlantColors.text3,
-                  ),
+                RichText(
                   textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: PlantTextStyles.body11Regular.copyWith(
+                      color: PlantColors.text3,
+                    ),
+                    children: [
+                      TextSpan(text: L.onboarding.termsPrefix),
+                      TextSpan(
+                        text: L.onboarding.termsOfUse,
+                        style: PlantTextStyles.body11Regular.copyWith(
+                          color: PlantColors.text3,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      TextSpan(text: L.onboarding.termsMiddle),
+                      TextSpan(
+                        text: L.onboarding.privacyPolicy,
+                        style: PlantTextStyles.body11Regular.copyWith(
+                          color: PlantColors.text3,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      TextSpan(text: L.onboarding.termsSuffix),
+                    ],
+                  ),
                 ).paddingOnly(
                   bottom: PlantSpacing.x28,
                   start: PlantSpacing.x24,
