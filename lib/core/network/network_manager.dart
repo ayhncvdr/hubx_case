@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:hubx_case/shared/utils/api_endpoints.dart';
 
 class NetworkManager {
@@ -32,7 +33,7 @@ class NetworkManager {
         LogInterceptor(
           requestBody: true,
           responseBody: true,
-          logPrint: (obj) => obj,
+          logPrint: (obj) => debugPrint(obj.toString()),
         ),
       );
     }
