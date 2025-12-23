@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hubx_case/core/theme/plant_colors.dart';
 
 abstract class PlantTextStyles {
@@ -6,8 +7,7 @@ abstract class PlantTextStyles {
 
   static double _height(int lineHeight, int fontSize) => lineHeight / fontSize;
 
-  static const TextStyle _base = TextStyle(
-    fontFamily: fontFamily,
+  static final TextStyle _base = GoogleFonts.roboto(
     color: PlantColors.primaryText,
     letterSpacing: 0,
   );
