@@ -110,6 +110,6 @@ abstract class PlantTextStyles {
   static final TextStyle body11Regular = _base.copyWith(
     fontSize: 11,
     fontWeight: FontWeight.w400,
-    height: _height(15, 12),
+    height: _height(15, 11),
   );
 }

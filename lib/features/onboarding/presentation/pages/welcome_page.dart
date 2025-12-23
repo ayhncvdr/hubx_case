@@ -80,7 +80,9 @@ class WelcomePage extends StatelessWidget {
               children: [
                 PlantButton(
                   label: L.onboarding.getStarted,
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO: Implement navigation to next page
+                  },
                 ).paddingOnly(bottom: PlantSpacing.x16),
                 RichText(
                   textAlign: TextAlign.center,
