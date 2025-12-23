@@ -5,5 +5,7 @@ class PlantSpacing {
   static const double x16 = 16;
   static const double x20 = 20;
   static const double x24 = 24;
+  static const double x28 = 28;
   static const double x32 = 32;
+  static const double x40 = 40;
 }
