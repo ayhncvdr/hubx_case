@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hubx_case/core/theme/plant_colors.dart';
 import 'package:hubx_case/core/theme/plant_spacing.dart';
 import 'package:hubx_case/loc_generated/l.dart';
@@ -81,7 +82,7 @@ class WelcomePage extends StatelessWidget {
                 PlantButton(
                   label: L.onboarding.getStarted,
                   onPressed: () {
-                    // TODO: Implement navigation to next page
+                    context.go('/onboarding');
                   },
                 ).paddingOnly(bottom: PlantSpacing.x16),
                 RichText(

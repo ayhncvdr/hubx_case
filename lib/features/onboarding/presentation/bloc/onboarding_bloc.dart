@@ -5,18 +5,26 @@ import 'package:hubx_case/features/onboarding/presentation/bloc/onboarding_state
 
 class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   OnboardingBloc() : super(const OnboardingState()) {
-    on<OnboardingCompleted>(_onCompleted);
+    on<OnboardingEventChangePage>(_onPageChange);
+    on<OnboardingEventClosePaywall>(_onClosePaywall);
   }
 
-  Future<void> _onCompleted(
-    OnboardingCompleted event,
+  void _onPageChange(
+    OnboardingEventChangePage event,
+    Emitter<OnboardingState> emit,
+  ) {
+    emit(state.copyWith(currentPage: event.page));
+  }
+
+  Future<void> _onClosePaywall(
+    OnboardingEventClosePaywall event,
     Emitter<OnboardingState> emit,
   ) async {
     try {
       final sp = await SPHelper.instance();
       await sp.set<bool>(SPKey.onboardingCompleted, true);
       emit(state.copyWith(completed: true));
-    } catch (error) {
+    } catch (_) {
       emit(state.copyWith(completed: false));
     }
   }
