@@ -14,14 +14,11 @@ extension MediaQueryValues on BuildContext {
 
   bool get isXs => screenWidth <= Breakpoints.xs;
 
-  bool get isSm =>
-      screenWidth > Breakpoints.xs && screenWidth <= Breakpoints.sm;
+  bool get isSm => screenWidth > Breakpoints.xs && screenWidth <= Breakpoints.sm;
 
-  bool get isMd =>
-      screenWidth > Breakpoints.sm && screenWidth <= Breakpoints.md;
+  bool get isMd => screenWidth > Breakpoints.sm && screenWidth <= Breakpoints.md;
 
-  bool get isLg =>
-      screenWidth > Breakpoints.md && screenWidth <= Breakpoints.lg;
+  bool get isLg => screenWidth > Breakpoints.md && screenWidth <= Breakpoints.lg;
 
   bool get isXl => screenWidth > Breakpoints.lg;
 }

@@ -1,47 +1,128 @@
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:hubx_case/shared/utils/api_endpoints.dart';
 
 class NetworkManager {
-  NetworkManager({http.Client? httpClient}) : _httpClient = httpClient ?? http.Client();
+  NetworkManager({
+    Dio? dio,
+    Duration connectTimeout = const Duration(seconds: 10),
+    Duration receiveTimeout = const Duration(seconds: 20),
+    Duration sendTimeout = const Duration(seconds: 20),
+    bool enableLogging = true,
+  }) : _dio = dio ?? _createDio(connectTimeout, receiveTimeout, sendTimeout, enableLogging);
 
-  final http.Client _httpClient;
+  final Dio _dio;
 
-  Uri _buildUri(String path, {Map<String, String>? query}) {
-    final base = Uri.parse(ApiEndpoints.baseUrl);
-    return Uri(
-      scheme: base.scheme,
-      userInfo: base.userInfo,
-      host: base.host,
-      port: base.hasPort ? base.port : null,
-      path: base.path.endsWith('/') ? '${base.path}$path'.replaceAll('//', '/') : '${base.path}/$path',
-      queryParameters: query,
+  static Dio _createDio(
+    Duration connectTimeout,
+    Duration receiveTimeout,
+    Duration sendTimeout,
+    bool enableLogging,
+  ) {
+    final dio = Dio(
+      BaseOptions(
+        baseUrl: ApiEndpoints.baseUrl,
+        connectTimeout: connectTimeout,
+        receiveTimeout: receiveTimeout,
+        sendTimeout: sendTimeout,
+      ),
     );
+
+    if (enableLogging) {
+      dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          logPrint: (obj) => debugPrint(obj.toString()),
+        ),
+      );
+    }
+
+    return dio;
   }
 
   Future<Map<String, dynamic>> getJson(
     String path, {
-    Map<String, String>? query,
-    Map<String, String>? headers,
-    Duration timeout = const Duration(seconds: 15),
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? headers,
+    Duration? timeout,
+    CancelToken? cancelToken,
   }) async {
-    final uri = _buildUri(path, query: query);
-    final response = await _httpClient.get(uri, headers: headers).timeout(timeout);
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      try {
-        final decoded = json.decode(response.body);
-        if (decoded is Map<String, dynamic>) {
-          return decoded;
-        }
-        throw const FormatException('Expected JSON object');
-      } on FormatException catch (e) {
-        throw http.ClientException('Invalid JSON: ${e.message}', uri);
-      }
+    final response = await _dio.get<Map<String, dynamic>>(
+      path,
+      queryParameters: query,
+      options: Options(
+        headers: headers,
+        sendTimeout: timeout,
+        receiveTimeout: timeout,
+      ),
+      cancelToken: cancelToken,
+    );
+
+    if (response.data is Map<String, dynamic>) {
+      return response.data!;
     }
-    throw http.ClientException(
-      'Request failed: ${response.statusCode}',
-      uri,
+
+    throw DioException(
+      requestOptions: response.requestOptions,
+      response: response,
+      error: 'Expected JSON object',
+      type: DioExceptionType.badResponse,
+    );
+  }
+
+  Future<Map<String, dynamic>> postJson(
+    String path, {
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? headers,
+    Object? data,
+    Duration? timeout,
+    CancelToken? cancelToken,
+  }) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      path,
+      queryParameters: query,
+      data: data,
+      options: Options(
+        headers: headers,
+        sendTimeout: timeout,
+        receiveTimeout: timeout,
+      ),
+      cancelToken: cancelToken,
+    );
+
+    if (response.data is Map<String, dynamic>) {
+      return response.data!;
+    }
+
+    throw DioException(
+      requestOptions: response.requestOptions,
+      response: response,
+      error: 'Expected JSON object',
+      type: DioExceptionType.badResponse,
+    );
+  }
+
+  Future<void> download(
+    String path, {
+    required String savePath,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? headers,
+    ProgressCallback? onReceiveProgress,
+    CancelToken? cancelToken,
+    Duration? timeout,
+  }) async {
+    await _dio.download(
+      path,
+      savePath,
+      queryParameters: query,
+      options: Options(
+        headers: headers,
+        receiveTimeout: timeout,
+        sendTimeout: timeout,
+      ),
+      onReceiveProgress: onReceiveProgress,
+      cancelToken: cancelToken,
     );
   }
 }
