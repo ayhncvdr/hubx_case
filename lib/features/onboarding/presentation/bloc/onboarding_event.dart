@@ -15,6 +15,6 @@ class OnboardingEventChangePage extends OnboardingEvent {
   List<Object?> get props => [page];
 }
 
-class OnboardingEventContinue extends OnboardingEvent {
-  const OnboardingEventContinue();
+class OnboardingEventClosePaywall extends OnboardingEvent {
+  const OnboardingEventClosePaywall();
 }

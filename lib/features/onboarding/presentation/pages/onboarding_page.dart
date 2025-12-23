@@ -176,11 +176,6 @@ Widget _buildContinueButton(BuildContext context, PageController pageController)
       if (current < _Constants.pageCount - 1) {
         final next = current + 1;
         context.read<OnboardingBloc>().add(OnboardingEventChangePage(next));
-        pageController.animateToPage(
-          next,
-          duration: PlantDurations.medium,
-          curve: Curves.easeInOut,
-        );
       } else {
         context.go('/paywall');
       }
