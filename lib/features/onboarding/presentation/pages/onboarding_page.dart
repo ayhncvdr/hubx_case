@@ -17,6 +17,7 @@ import 'package:hubx_case/shared/widgets/plant_scaffold.dart';
 
 abstract class _Constants {
   static const int pageCount = 2;
+  static const int indicatorCount = 3;
   static const double activeIndicatorSize = 10.0;
   static const double inactiveIndicatorSize = 6.0;
 }
@@ -150,7 +151,7 @@ Widget _buildIndicator(int currentPage) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: List.generate(
-      _Constants.pageCount,
+      _Constants.indicatorCount,
       (index) {
         final isActive = currentPage == index;
         return AnimatedContainer(
