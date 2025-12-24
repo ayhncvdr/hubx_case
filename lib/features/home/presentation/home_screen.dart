@@ -329,6 +329,7 @@ class HomeSuccessView extends StatelessWidget {
 
   Widget _buildCategoriesList(List<Category> categories) {
     return GridView.builder(
+      padding: EdgeInsetsDirectional.zero,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

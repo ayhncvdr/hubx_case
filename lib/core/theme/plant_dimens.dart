@@ -9,4 +9,5 @@ class PlantDimens {
   static const double x32 = 32;
   static const double x40 = 40;
   static const double x48 = 48;
+  static const double x72 = 72;
 }

@@ -30,7 +30,7 @@ class WelcomePage extends StatelessWidget {
                 children: [
                   const PlantImage(assetPath: PlantAssets.onboardingPot),
                   Positioned(
-                    top: PlantDimens.x24,
+                    top: PlantDimens.x72,
                     left: 0,
                     right: 0,
                     child: Column(
