@@ -1,8 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hubx_case/features/home/domain/entities/category.dart';
+import 'package:hubx_case/features/home/domain/entities/question.dart';
 import 'package:hubx_case/features/home/domain/usecases/get_categories_usecase.dart';
 import 'package:hubx_case/features/home/domain/usecases/get_questions_usecase.dart';
-import 'package:hubx_case/features/home/presentation/bloc/home_event.dart';
-import 'package:hubx_case/features/home/presentation/bloc/home_state.dart';
+
+part 'home_event.dart';
+part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({

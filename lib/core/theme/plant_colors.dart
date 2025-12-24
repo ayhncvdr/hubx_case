@@ -17,4 +17,8 @@ class PlantColors {
   static const Color bannerTextGradient2 = Color(0xFFE4B046);
   static const Color inactiveText = Color(0xFF979798);
   static const Color searchHint = Color(0xFFAFB0AF);
+  static const Color bottomNavBorder = Color(0x1A13231B); // rgba(19, 35, 27, 0.1)
+  static const Color fabGradientStart = Color(0xFF28AF6E); // rgba(40, 175, 110, 1)
+  static const Color fabGradientEnd = Color(0xFF2CCC80); // rgba(44, 204, 128, 1)
+  static const Color fabBorder = Color(0x3DFFFFFF); // rgba(255, 255, 255, 0.24)
 }

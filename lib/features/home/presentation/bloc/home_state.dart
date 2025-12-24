@@ -1,8 +1,6 @@
-import 'package:equatable/equatable.dart';
-import 'package:hubx_case/features/home/domain/entities/category.dart';
-import 'package:hubx_case/features/home/domain/entities/question.dart';
+part of 'home_bloc.dart';
 
-class HomeState extends Equatable {
+class HomeState {
   const HomeState({
     this.categories = const [],
     this.questions = const [],
@@ -29,6 +27,5 @@ class HomeState extends Equatable {
     );
   }
 
-  @override
   List<Object?> get props => [categories, questions, isLoading, error];
 }
