@@ -10,4 +10,7 @@ class PlantAssets {
   static const String landingMyGarden = "assets/landing/my_garden.png";
   static const String landingProfile = "assets/landing/profile.png";
   static const String landingScan = "assets/landing/scan.png";
+  static const String homeBackground = "assets/home/home_background.png";
+  static const String homePremiumOfferIcon = "assets/home/premium_offer_icon.svg";
+  static const String homePremiumChevronRight = "assets/home/premium_chevron_right.svg";
 }

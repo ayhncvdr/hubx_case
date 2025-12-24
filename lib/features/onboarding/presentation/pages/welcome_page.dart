@@ -19,14 +19,7 @@ class WelcomePage extends StatelessWidget {
     return PlantScaffold(
       body: DecoratedBox(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              PlantColors.backgroundSoft,
-              PlantColors.white,
-            ],
-          ),
+          color: PlantColors.primaryBackground,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

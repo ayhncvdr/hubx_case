@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubx_case/core/theme/plant_colors.dart';
 import 'package:hubx_case/core/theme/plant_dimens.dart';
+import 'package:hubx_case/core/theme/plant_durations.dart';
 import 'package:hubx_case/core/theme/plant_radii.dart';
 import 'package:hubx_case/features/onboarding/presentation/bloc/onboarding_bloc.dart';
 import 'package:hubx_case/loc_generated/l.dart';
@@ -25,63 +26,106 @@ abstract class _Constants {
   static const double borderWidth = 1.5;
 }
 
-class PaywallPage extends StatelessWidget {
+class PaywallPage extends StatefulWidget {
   const PaywallPage({super.key});
+
+  @override
+  State<PaywallPage> createState() => _PaywallPageState();
+}
+
+class _PaywallPageState extends State<PaywallPage> {
+  Future<void> _handleClose(BuildContext blocContext, bool isCompleted) async {
+    if (!blocContext.mounted) {
+      return;
+    }
+
+    if (isCompleted) {
+      if (!blocContext.mounted) {
+        return;
+      }
+      if (blocContext.canPop()) {
+        blocContext.pop();
+      } else {
+        blocContext.go('/home');
+      }
+    } else {
+      // Not completed yet - mark as completed and navigate
+      if (!blocContext.mounted) {
+        return;
+      }
+      blocContext.read<OnboardingBloc>().add(const OnboardingEventClosePaywall());
+
+      // Wait for the state to update, then navigate
+      await Future.delayed(PlantDurations.short);
+
+      if (!blocContext.mounted) {
+        return;
+      }
+      if (blocContext.canPop()) {
+        blocContext.pop();
+      } else {
+        blocContext.go('/home');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => OnboardingBloc(),
-      child: PlantScaffold(
-        body: DecoratedBox(
-          decoration: const BoxDecoration(
-            color: PlantColors.paywallBackground,
-          ),
-          child: BlocConsumer<OnboardingBloc, OnboardingState>(
-            listenWhen: (previous, current) => previous.completed != current.completed && current.completed,
-            listener: (context, state) {
-              // Navigate to home after onboarding is marked as completed
-              context.go('/home');
+      create: (_) => OnboardingBloc()..add(const OnboardingEventLoadStatus()),
+      child: BlocBuilder<OnboardingBloc, OnboardingState>(
+        builder: (context, state) {
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) async {
+              if (!didPop) {
+                await _handleClose(context, state.completed);
+              }
             },
-            builder: (context, state) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _buildHero(context),
-                          _buildBenefits()
-                              .paddingSymmetric(
-                                horizontal: PlantDimens.x20,
-                              )
-                              .paddingOnly(bottom: PlantDimens.x24),
-                          _buildPlanOptions(context, state)
-                              .paddingSymmetric(
-                                horizontal: PlantDimens.x20,
-                              )
-                              .paddingOnly(bottom: PlantDimens.x24),
-                          _buildCTA(context)
-                              .paddingSymmetric(
-                                horizontal: PlantDimens.x20,
-                              )
-                              .paddingOnly(bottom: PlantDimens.x20),
-                        ],
+            child: PlantScaffold(
+              body: DecoratedBox(
+                decoration: const BoxDecoration(
+                  color: PlantColors.paywallBackground,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _buildHero(context, state.completed),
+                            _buildBenefits()
+                                .paddingSymmetric(
+                                  horizontal: PlantDimens.x20,
+                                )
+                                .paddingOnly(bottom: PlantDimens.x24),
+                            _buildPlanOptions(context, state)
+                                .paddingSymmetric(
+                                  horizontal: PlantDimens.x20,
+                                )
+                                .paddingOnly(bottom: PlantDimens.x24),
+                            _buildCTA(context)
+                                .paddingSymmetric(
+                                  horizontal: PlantDimens.x20,
+                                )
+                                .paddingOnly(bottom: PlantDimens.x20),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildHero(BuildContext context) {
+  Widget _buildHero(BuildContext context, bool completed) {
     return Stack(
       children: [
         const PlantImage(
@@ -95,7 +139,7 @@ class PaywallPage extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(PlantRadii.x16),
             onTap: () {
-              context.read<OnboardingBloc>().add(const OnboardingEventClosePaywall());
+              _handleClose(context, completed);
             },
             child: Container(
               padding: const EdgeInsets.all(PlantDimens.x8),

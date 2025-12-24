@@ -7,6 +7,10 @@ sealed class OnboardingEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class OnboardingEventLoadStatus extends OnboardingEvent {
+  const OnboardingEventLoadStatus();
+}
+
 class OnboardingEventChangePage extends OnboardingEvent {
   const OnboardingEventChangePage(this.page);
   final int page;
