@@ -21,4 +21,6 @@ class PlantColors {
   static const Color fabGradientStart = Color(0xFF28AF6E); // rgba(40, 175, 110, 1)
   static const Color fabGradientEnd = Color(0xFF2CCC80); // rgba(44, 204, 128, 1)
   static const Color fabBorder = Color(0x3DFFFFFF); // rgba(255, 255, 255, 0.24)
+  static const Color paywallBackground = Color(0xFF131D18); // rgba(19, 29, 24, 1)
+  static const Color paywallCloseButtonBackground = Color(0x73000000); // Colors.black45
 }

@@ -15,8 +15,6 @@ import 'package:hubx_case/shared/widgets/plant_scaffold.dart';
 import 'package:hubx_case/shared/widgets/plant_text.dart';
 
 abstract class _Constants {
-  static const Color backgroundColor = Color.fromRGBO(19, 29, 24, 1);
-  static const Color closeButtonBackground = Colors.black45;
   static const double benefitCardBackgroundOpacity = 0.08;
   static const double benefitCardBorderOpacity = 0.08;
   static const double benefitCardIconBackgroundOpacity = 0.12;
@@ -37,7 +35,7 @@ class PaywallPage extends StatelessWidget {
       child: PlantScaffold(
         body: DecoratedBox(
           decoration: const BoxDecoration(
-            color: _Constants.backgroundColor,
+            color: PlantColors.paywallBackground,
           ),
           child: BlocConsumer<OnboardingBloc, OnboardingState>(
             listenWhen: (previous, current) => previous.completed != current.completed && current.completed,
@@ -102,7 +100,7 @@ class PaywallPage extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(PlantDimens.x8),
               decoration: const BoxDecoration(
-                color: _Constants.closeButtonBackground,
+                color: PlantColors.paywallCloseButtonBackground,
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.close, color: PlantColors.white),
