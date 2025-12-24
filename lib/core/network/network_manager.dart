@@ -15,7 +15,6 @@ class NetworkManager {
 
   static NetworkManager? _instance;
 
-  /// Singleton instance of NetworkManager
   factory NetworkManager.instance() {
     _instance ??= NetworkManager._();
     return _instance!;

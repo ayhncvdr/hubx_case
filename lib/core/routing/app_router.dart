@@ -33,13 +33,12 @@ class AppRouter {
         path: '/home',
         builder: (context, state) {
           final repository = HomeRepositoryImpl();
-          final homeBloc = HomeBloc(
-            getCategoriesUseCase: GetCategoriesUseCase(repository),
-            getQuestionsUseCase: GetQuestionsUseCase(repository),
-          )..add(const HomeEventLoadData());
 
           return BlocProvider<HomeBloc>(
-            create: (context) => homeBloc,
+            create: (context) => HomeBloc(
+              getCategoriesUseCase: GetCategoriesUseCase(repository),
+              getQuestionsUseCase: GetQuestionsUseCase(repository),
+            )..add(const HomeEventLoadData()),
             child: const HomePage(),
           );
         },

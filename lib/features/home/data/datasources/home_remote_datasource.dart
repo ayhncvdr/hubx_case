@@ -32,7 +32,6 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
     try {
       final response = await _networkManager.getJson(ApiEndpoints.getQuestions);
 
-      // Handle both direct List response and wrapped in 'data' field
       List<dynamic> questionsList;
       if (response is List) {
         questionsList = response;
@@ -42,7 +41,12 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         throw Exception('Invalid response format: expected List or Map with data field');
       }
 
-      return questionsList.map((json) => QuestionModel.fromJson(json as Map<String, dynamic>)).toList();
+      return questionsList.map((json) {
+        if (json is! Map<String, dynamic>) {
+          throw Exception('Invalid question format: expected Map<String, dynamic>, got ${json.runtimeType}');
+        }
+        return QuestionModel.fromJson(json);
+      }).toList();
     } catch (e) {
       throw Exception('Failed to fetch questions: $e');
     }
