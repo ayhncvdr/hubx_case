@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubx_case/core/theme/plant_colors.dart';
-import 'package:hubx_case/core/theme/plant_spacing.dart';
+import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/loc_generated/l.dart';
 import 'package:hubx_case/shared/styles/plant_text_styles.dart';
 import 'package:hubx_case/shared/utils/plant_assets.dart';
@@ -37,7 +37,7 @@ class WelcomePage extends StatelessWidget {
                 children: [
                   const PlantImage(assetPath: PlantAssets.onboardingPot),
                   Positioned(
-                    top: PlantSpacing.x24,
+                    top: PlantDimens.x24,
                     left: 0,
                     right: 0,
                     child: Column(
@@ -57,9 +57,9 @@ class WelcomePage extends StatelessWidget {
                             ],
                           ),
                         ).paddingOnly(
-                          start: PlantSpacing.x20,
-                          end: PlantSpacing.x20,
-                          bottom: PlantSpacing.x8,
+                          start: PlantDimens.x20,
+                          end: PlantDimens.x20,
+                          bottom: PlantDimens.x8,
                         ),
                         PlantText(
                           L.onboarding.welcomeSubtitle,
@@ -67,8 +67,8 @@ class WelcomePage extends StatelessWidget {
                             color: PlantColors.text2,
                           ),
                         ).paddingOnly(
-                          start: PlantSpacing.x20,
-                          end: PlantSpacing.x20,
+                          start: PlantDimens.x20,
+                          end: PlantDimens.x20,
                         ),
                       ],
                     ),
@@ -84,7 +84,7 @@ class WelcomePage extends StatelessWidget {
                   onPressed: () {
                     context.go('/onboarding');
                   },
-                ).paddingOnly(bottom: PlantSpacing.x16),
+                ).paddingOnly(bottom: PlantDimens.x16),
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
@@ -112,12 +112,12 @@ class WelcomePage extends StatelessWidget {
                     ],
                   ),
                 ).paddingOnly(
-                  bottom: PlantSpacing.x28,
-                  start: PlantSpacing.x24,
-                  end: PlantSpacing.x24,
+                  bottom: PlantDimens.x28,
+                  start: PlantDimens.x24,
+                  end: PlantDimens.x24,
                 ),
               ],
-            ).paddingSymmetric(horizontal: PlantSpacing.x20),
+            ).paddingSymmetric(horizontal: PlantDimens.x20),
           ],
         ),
       ),

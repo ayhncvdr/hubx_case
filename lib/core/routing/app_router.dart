@@ -5,8 +5,8 @@ import 'package:hubx_case/features/home/data/repositories/home_repository_impl.d
 import 'package:hubx_case/features/home/domain/usecases/get_categories_usecase.dart';
 import 'package:hubx_case/features/home/domain/usecases/get_questions_usecase.dart';
 import 'package:hubx_case/features/home/presentation/bloc/home_bloc.dart';
-import 'package:hubx_case/features/home/presentation/bloc/home_event.dart';
-import 'package:hubx_case/features/home/presentation/home_page.dart';
+import 'package:hubx_case/features/landing/presentation/bloc/plant_landing_bloc.dart';
+import 'package:hubx_case/features/landing/presentation/pages/plant_landing_page.dart';
 import 'package:hubx_case/features/onboarding/presentation/pages/onboarding_page.dart';
 import 'package:hubx_case/features/onboarding/presentation/pages/paywall_page.dart';
 import 'package:hubx_case/features/onboarding/presentation/pages/welcome_page.dart';
@@ -34,12 +34,19 @@ class AppRouter {
         builder: (context, state) {
           final repository = HomeRepositoryImpl();
 
-          return BlocProvider<HomeBloc>(
-            create: (context) => HomeBloc(
-              getCategoriesUseCase: GetCategoriesUseCase(repository),
-              getQuestionsUseCase: GetQuestionsUseCase(repository),
-            )..add(const HomeEventLoadData()),
-            child: const HomePage(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<HomeBloc>(
+                create: (context) => HomeBloc(
+                  getCategoriesUseCase: GetCategoriesUseCase(repository),
+                  getQuestionsUseCase: GetQuestionsUseCase(repository),
+                )..add(const HomeEventLoadData()),
+              ),
+              BlocProvider<PlantLandingBloc>(
+                create: (context) => PlantLandingBloc(),
+              ),
+            ],
+            child: const PlantLandingPage(),
           );
         },
       ),

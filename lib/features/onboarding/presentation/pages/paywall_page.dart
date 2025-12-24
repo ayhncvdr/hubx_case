@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubx_case/core/theme/plant_colors.dart';
+import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/core/theme/plant_radii.dart';
-import 'package:hubx_case/core/theme/plant_spacing.dart';
 import 'package:hubx_case/features/onboarding/presentation/bloc/onboarding_bloc.dart';
 import 'package:hubx_case/loc_generated/l.dart';
 import 'package:hubx_case/shared/styles/plant_text_styles.dart';
@@ -15,8 +15,6 @@ import 'package:hubx_case/shared/widgets/plant_scaffold.dart';
 import 'package:hubx_case/shared/widgets/plant_text.dart';
 
 abstract class _Constants {
-  static const Color backgroundColor = Color.fromRGBO(19, 29, 24, 1);
-  static const Color closeButtonBackground = Colors.black45;
   static const double benefitCardBackgroundOpacity = 0.08;
   static const double benefitCardBorderOpacity = 0.08;
   static const double benefitCardIconBackgroundOpacity = 0.12;
@@ -37,7 +35,7 @@ class PaywallPage extends StatelessWidget {
       child: PlantScaffold(
         body: DecoratedBox(
           decoration: const BoxDecoration(
-            color: _Constants.backgroundColor,
+            color: PlantColors.paywallBackground,
           ),
           child: BlocConsumer<OnboardingBloc, OnboardingState>(
             listenWhen: (previous, current) => previous.completed != current.completed && current.completed,
@@ -57,19 +55,19 @@ class PaywallPage extends StatelessWidget {
                           _buildHero(context),
                           _buildBenefits()
                               .paddingSymmetric(
-                                horizontal: PlantSpacing.x20,
+                                horizontal: PlantDimens.x20,
                               )
-                              .paddingOnly(bottom: PlantSpacing.x24),
+                              .paddingOnly(bottom: PlantDimens.x24),
                           _buildPlanOptions(context, state)
                               .paddingSymmetric(
-                                horizontal: PlantSpacing.x20,
+                                horizontal: PlantDimens.x20,
                               )
-                              .paddingOnly(bottom: PlantSpacing.x24),
+                              .paddingOnly(bottom: PlantDimens.x24),
                           _buildCTA(context)
                               .paddingSymmetric(
-                                horizontal: PlantSpacing.x20,
+                                horizontal: PlantDimens.x20,
                               )
-                              .paddingOnly(bottom: PlantSpacing.x20),
+                              .paddingOnly(bottom: PlantDimens.x20),
                         ],
                       ),
                     ),
@@ -92,17 +90,17 @@ class PaywallPage extends StatelessWidget {
           fit: BoxFit.fitWidth,
         ),
         Positioned(
-          top: PlantSpacing.x12,
-          right: PlantSpacing.x20,
+          top: PlantDimens.x12,
+          right: PlantDimens.x20,
           child: InkWell(
             borderRadius: BorderRadius.circular(PlantRadii.x16),
             onTap: () {
               context.read<OnboardingBloc>().add(const OnboardingEventClosePaywall());
             },
             child: Container(
-              padding: const EdgeInsets.all(PlantSpacing.x8),
+              padding: const EdgeInsets.all(PlantDimens.x8),
               decoration: const BoxDecoration(
-                color: _Constants.closeButtonBackground,
+                color: PlantColors.paywallCloseButtonBackground,
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.close, color: PlantColors.white),
@@ -110,9 +108,9 @@ class PaywallPage extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: PlantSpacing.x20,
-          right: PlantSpacing.x20,
-          bottom: PlantSpacing.x24,
+          left: PlantDimens.x20,
+          right: PlantDimens.x20,
+          bottom: PlantDimens.x24,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -155,12 +153,12 @@ class PaywallPage extends StatelessWidget {
             icon: Icons.flash_on,
             title: L.onboarding.paywallBenefitFasterTitle,
             subtitle: L.onboarding.paywallBenefitFasterSubtitle,
-          ).paddingOnly(start: PlantSpacing.x12),
+          ).paddingOnly(start: PlantDimens.x12),
           _benefitCard(
             icon: Icons.flash_on,
             title: L.onboarding.paywallBenefitFasterTitle,
             subtitle: L.onboarding.paywallBenefitFasterSubtitle,
-          ).paddingOnly(start: PlantSpacing.x12),
+          ).paddingOnly(start: PlantDimens.x12),
         ],
       ),
     );
@@ -174,7 +172,7 @@ class PaywallPage extends StatelessWidget {
     return SizedBox(
       width: _Constants.benefitCardWidth,
       child: Container(
-        padding: const EdgeInsets.all(PlantSpacing.x16),
+        padding: const EdgeInsets.all(PlantDimens.x16),
         decoration: BoxDecoration(
           color: PlantColors.white.withOpacity(_Constants.benefitCardBackgroundOpacity),
           borderRadius: BorderRadius.circular(PlantRadii.x12),
@@ -186,7 +184,7 @@ class PaywallPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.all(PlantSpacing.x8),
+              padding: const EdgeInsets.all(PlantDimens.x8),
               decoration: BoxDecoration(
                 color: PlantColors.white.withOpacity(_Constants.benefitCardIconBackgroundOpacity),
                 shape: BoxShape.circle,
@@ -196,7 +194,7 @@ class PaywallPage extends StatelessWidget {
             PlantText(
               title,
               style: PlantTextStyles.title18Medium.copyWith(color: PlantColors.white),
-            ).paddingOnly(top: PlantSpacing.x12),
+            ).paddingOnly(top: PlantDimens.x12),
             PlantText(
               subtitle,
               style: PlantTextStyles.body14Regular.copyWith(color: Colors.white70),
@@ -222,7 +220,7 @@ class PaywallPage extends StatelessWidget {
           selected: state.selectedPlanIndex == 1,
           badgeText: L.onboarding.paywallPlanYearBadge,
           onTap: () => context.read<OnboardingBloc>().add(const OnboardingEventSelectPlan(1)),
-        ).paddingOnly(top: PlantSpacing.x12),
+        ).paddingOnly(top: PlantDimens.x12),
       ],
     );
   }
@@ -242,7 +240,7 @@ class PaywallPage extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(PlantRadii.x12),
       child: Container(
-        padding: const EdgeInsets.all(PlantSpacing.x16),
+        padding: const EdgeInsets.all(PlantDimens.x16),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(PlantRadii.x12),
@@ -270,13 +268,13 @@ class PaywallPage extends StatelessWidget {
                     style: PlantTextStyles.body14Regular.copyWith(color: Colors.white70),
                   ),
                 ],
-              ).paddingOnly(start: PlantSpacing.x12),
+              ).paddingOnly(start: PlantDimens.x12),
             ),
             if (badgeText != null)
               Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: PlantSpacing.x12,
-                  vertical: PlantSpacing.x8,
+                  horizontal: PlantDimens.x12,
+                  vertical: PlantDimens.x8,
                 ),
                 decoration: BoxDecoration(
                   color: PlantColors.white.withOpacity(_Constants.badgeBackgroundOpacity),
@@ -302,17 +300,17 @@ class PaywallPage extends StatelessWidget {
           onPressed: () {
             /* No action */
           },
-        ).paddingOnly(bottom: PlantSpacing.x8),
+        ).paddingOnly(bottom: PlantDimens.x8),
         PlantText(
           L.onboarding.paywallCtaDisclaimer,
           style: PlantTextStyles.body11Regular.copyWith(color: Colors.white70),
           textAlign: TextAlign.center,
-        ).paddingOnly(bottom: PlantSpacing.x8),
+        ).paddingOnly(bottom: PlantDimens.x8),
         PlantText(
           L.onboarding.paywallFooter,
           style: PlantTextStyles.body12Regular.copyWith(color: Colors.white70),
           textAlign: TextAlign.center,
-        ).paddingOnly(bottom: PlantSpacing.x12),
+        ).paddingOnly(bottom: PlantDimens.x12),
       ],
     );
   }
