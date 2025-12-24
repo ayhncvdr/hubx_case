@@ -1,15 +1,24 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hubx_case/shared/utils/api_endpoints.dart';
 
 class NetworkManager {
-  NetworkManager({
+  NetworkManager._({
     Dio? dio,
     Duration connectTimeout = const Duration(seconds: 10),
     Duration receiveTimeout = const Duration(seconds: 20),
     Duration sendTimeout = const Duration(seconds: 20),
     bool enableLogging = true,
   }) : _dio = dio ?? _createDio(connectTimeout, receiveTimeout, sendTimeout, enableLogging);
+
+  static NetworkManager? _instance;
+
+  factory NetworkManager.instance() {
+    _instance ??= NetworkManager._();
+    return _instance!;
+  }
 
   final Dio _dio;
 
@@ -41,34 +50,39 @@ class NetworkManager {
     return dio;
   }
 
-  Future<Map<String, dynamic>> getJson(
+  Future<dynamic> getJson(
     String path, {
     Map<String, dynamic>? query,
     Map<String, dynamic>? headers,
     Duration? timeout,
     CancelToken? cancelToken,
   }) async {
-    final response = await _dio.get<Map<String, dynamic>>(
+    final response = await _dio.get<dynamic>(
       path,
       queryParameters: query,
       options: Options(
         headers: headers,
         sendTimeout: timeout,
         receiveTimeout: timeout,
+        responseType: ResponseType.json,
       ),
       cancelToken: cancelToken,
     );
 
-    if (response.data is Map<String, dynamic>) {
-      return response.data!;
+    if (response.data is String) {
+      try {
+        return json.decode(response.data as String);
+      } catch (e) {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          error: 'Failed to parse JSON string: $e',
+          type: DioExceptionType.badResponse,
+        );
+      }
     }
 
-    throw DioException(
-      requestOptions: response.requestOptions,
-      response: response,
-      error: 'Expected JSON object',
-      type: DioExceptionType.badResponse,
-    );
+    return response.data;
   }
 
   Future<Map<String, dynamic>> postJson(
@@ -79,7 +93,7 @@ class NetworkManager {
     Duration? timeout,
     CancelToken? cancelToken,
   }) async {
-    final response = await _dio.post<Map<String, dynamic>>(
+    final response = await _dio.post<dynamic>(
       path,
       queryParameters: query,
       data: data,
@@ -87,18 +101,44 @@ class NetworkManager {
         headers: headers,
         sendTimeout: timeout,
         receiveTimeout: timeout,
+        responseType: ResponseType.json,
       ),
       cancelToken: cancelToken,
     );
 
     if (response.data is Map<String, dynamic>) {
-      return response.data!;
+      return response.data as Map<String, dynamic>;
+    }
+
+    if (response.data is String) {
+      try {
+        final decoded = json.decode(response.data as String);
+        if (decoded is Map<String, dynamic>) {
+          return decoded;
+        }
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          error: 'Expected JSON object, got ${decoded.runtimeType}',
+          type: DioExceptionType.badResponse,
+        );
+      } catch (e) {
+        if (e is DioException) {
+          rethrow;
+        }
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          error: 'Failed to parse JSON string: $e',
+          type: DioExceptionType.badResponse,
+        );
+      }
     }
 
     throw DioException(
       requestOptions: response.requestOptions,
       response: response,
-      error: 'Expected JSON object',
+      error: 'Expected JSON object or string, got ${response.data.runtimeType}',
       type: DioExceptionType.badResponse,
     );
   }
