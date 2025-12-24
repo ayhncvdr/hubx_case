@@ -70,7 +70,16 @@ class NetworkManager {
     );
 
     if (response.data is String) {
-      return json.decode(response.data as String);
+      try {
+        return json.decode(response.data as String);
+      } catch (e) {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          error: 'Failed to parse JSON string: $e',
+          type: DioExceptionType.badResponse,
+        );
+      }
     }
 
     return response.data;
@@ -103,9 +112,20 @@ class NetworkManager {
 
     if (response.data is String) {
       try {
-        final decoded = json.decode(response.data as String) as Map<String, dynamic>;
-        return decoded;
+        final decoded = json.decode(response.data as String);
+        if (decoded is Map<String, dynamic>) {
+          return decoded;
+        }
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          error: 'Expected JSON object, got ${decoded.runtimeType}',
+          type: DioExceptionType.badResponse,
+        );
       } catch (e) {
+        if (e is DioException) {
+          rethrow;
+        }
         throw DioException(
           requestOptions: response.requestOptions,
           response: response,
