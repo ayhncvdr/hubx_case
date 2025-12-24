@@ -1,4 +1,4 @@
-class PlantSpacing {
+class PlantDimens {
   static const double x4 = 4;
   static const double x8 = 8;
   static const double x12 = 12;

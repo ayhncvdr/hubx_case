@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubx_case/core/theme/plant_colors.dart';
-import 'package:hubx_case/core/theme/plant_spacing.dart';
+import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/features/diagnose/presentation/diagnose_page.dart';
 import 'package:hubx_case/features/home/presentation/home_page.dart';
 import 'package:hubx_case/features/landing/presentation/bloc/plant_landing_bloc.dart';
@@ -133,14 +133,14 @@ class _PlantLandingView extends StatelessWidget {
               ),
               child: PlantImage(
                 assetPath: assetPath,
-                width: PlantSpacing.x24,
-                height: PlantSpacing.x24,
+                width: PlantDimens.x24,
+                height: PlantDimens.x24,
               ),
             ),
             PlantText(
               label,
               style: PlantTextStyles.body11Regular.copyWith(color: color),
-            ).paddingOnly(top: PlantSpacing.x4),
+            ).paddingOnly(top: PlantDimens.x4),
           ],
         ),
       ),
@@ -157,7 +157,7 @@ class _PlantLandingView extends StatelessWidget {
           },
           borderRadius: BorderRadius.circular(_Constants.floatingActionButtonRadius),
           child: Container(
-            padding: const EdgeInsets.all(PlantSpacing.x20),
+            padding: const EdgeInsets.all(PlantDimens.x20),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: const LinearGradient(
@@ -170,14 +170,14 @@ class _PlantLandingView extends StatelessWidget {
               ),
               border: Border.all(
                 color: PlantColors.fabBorder,
-                width: PlantSpacing.x4,
+                width: PlantDimens.x4,
               ),
             ),
             alignment: Alignment.center,
             child: const PlantImage(
               assetPath: PlantAssets.landingScan,
-              width: PlantSpacing.x28,
-              height: PlantSpacing.x28,
+              width: PlantDimens.x28,
+              height: PlantDimens.x28,
             ),
           ),
         ),

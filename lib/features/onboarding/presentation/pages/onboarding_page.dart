@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubx_case/core/theme/plant_colors.dart';
+import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/core/theme/plant_durations.dart';
-import 'package:hubx_case/core/theme/plant_spacing.dart';
 import 'package:hubx_case/features/onboarding/presentation/bloc/onboarding_bloc.dart';
 import 'package:hubx_case/loc_generated/l.dart';
 import 'package:hubx_case/shared/styles/plant_text_styles.dart';
@@ -67,10 +67,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(child: _buildPager(context, _pageController)),
-                _buildContinueButton(context, _pageController).paddingOnly(bottom: PlantSpacing.x16),
-                _buildIndicator(state.currentPage).paddingOnly(bottom: PlantSpacing.x48),
+                _buildContinueButton(context, _pageController).paddingOnly(bottom: PlantDimens.x16),
+                _buildIndicator(state.currentPage).paddingOnly(bottom: PlantDimens.x48),
               ],
-            ).paddingSymmetric(horizontal: PlantSpacing.x20),
+            ).paddingSymmetric(horizontal: PlantDimens.x20),
           ),
         ),
       ),
@@ -118,7 +118,7 @@ Widget _buildSlide({
         fit: BoxFit.cover,
       ),
       Positioned(
-        top: PlantSpacing.x24,
+        top: PlantDimens.x24,
         left: 0,
         right: 0,
         child: RichText(
@@ -154,7 +154,7 @@ Widget _buildIndicator(int currentPage) {
         final isActive = currentPage == index;
         return AnimatedContainer(
           duration: PlantDurations.medium,
-          margin: const EdgeInsets.symmetric(horizontal: PlantSpacing.x8),
+          margin: const EdgeInsets.symmetric(horizontal: PlantDimens.x8),
           width: isActive ? _Constants.activeIndicatorSize : _Constants.inactiveIndicatorSize,
           height: isActive ? _Constants.activeIndicatorSize : _Constants.inactiveIndicatorSize,
           decoration: BoxDecoration(

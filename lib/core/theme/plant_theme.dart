@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hubx_case/core/theme/color_schemes.dart';
+import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/core/theme/plant_radii.dart';
-import 'package:hubx_case/core/theme/plant_spacing.dart';
 import 'package:hubx_case/core/theme/typography.dart';
 
 class PlantTheme {
@@ -30,8 +30,8 @@ class PlantTheme {
           backgroundColor: scheme.primary,
           foregroundColor: scheme.onPrimary,
           padding: const EdgeInsets.symmetric(
-            horizontal: PlantSpacing.x20,
-            vertical: PlantSpacing.x12,
+            horizontal: PlantDimens.x20,
+            vertical: PlantDimens.x12,
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(PlantRadii.x12),
