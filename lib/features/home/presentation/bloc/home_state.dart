@@ -27,5 +27,6 @@ class HomeState extends Equatable{
     );
   }
 
+  @override
   List<Object?> get props => [categories, questions, isLoading, error];
 }

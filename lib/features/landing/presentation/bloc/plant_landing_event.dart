@@ -3,6 +3,7 @@ part of 'plant_landing_bloc.dart';
 sealed class PlantLandingEvent extends Equatable {
   const PlantLandingEvent();
 
+  @override
   List<Object?> get props => [];
 }
 

@@ -153,7 +153,7 @@ class _PlantLandingView extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            // TODO: Handle camera/scan action
+           /* No action */
           },
           borderRadius: BorderRadius.circular(_Constants.floatingActionButtonRadius),
           child: Container(
