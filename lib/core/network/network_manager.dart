@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hubx_case/shared/utils/api_endpoints.dart';
@@ -41,34 +43,30 @@ class NetworkManager {
     return dio;
   }
 
-  Future<Map<String, dynamic>> getJson(
+  Future<dynamic> getJson(
     String path, {
     Map<String, dynamic>? query,
     Map<String, dynamic>? headers,
     Duration? timeout,
     CancelToken? cancelToken,
   }) async {
-    final response = await _dio.get<Map<String, dynamic>>(
+    final response = await _dio.get<dynamic>(
       path,
       queryParameters: query,
       options: Options(
         headers: headers,
         sendTimeout: timeout,
         receiveTimeout: timeout,
+        responseType: ResponseType.json,
       ),
       cancelToken: cancelToken,
     );
 
-    if (response.data is Map<String, dynamic>) {
-      return response.data!;
+    if (response.data is String) {
+      return json.decode(response.data as String);
     }
 
-    throw DioException(
-      requestOptions: response.requestOptions,
-      response: response,
-      error: 'Expected JSON object',
-      type: DioExceptionType.badResponse,
-    );
+    return response.data;
   }
 
   Future<Map<String, dynamic>> postJson(
@@ -79,7 +77,7 @@ class NetworkManager {
     Duration? timeout,
     CancelToken? cancelToken,
   }) async {
-    final response = await _dio.post<Map<String, dynamic>>(
+    final response = await _dio.post<dynamic>(
       path,
       queryParameters: query,
       data: data,
@@ -87,18 +85,33 @@ class NetworkManager {
         headers: headers,
         sendTimeout: timeout,
         receiveTimeout: timeout,
+        responseType: ResponseType.json,
       ),
       cancelToken: cancelToken,
     );
 
     if (response.data is Map<String, dynamic>) {
-      return response.data!;
+      return response.data as Map<String, dynamic>;
+    }
+
+    if (response.data is String) {
+      try {
+        final decoded = json.decode(response.data as String) as Map<String, dynamic>;
+        return decoded;
+      } catch (e) {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          error: 'Failed to parse JSON string: $e',
+          type: DioExceptionType.badResponse,
+        );
+      }
     }
 
     throw DioException(
       requestOptions: response.requestOptions,
       response: response,
-      error: 'Expected JSON object',
+      error: 'Expected JSON object or string, got ${response.data.runtimeType}',
       type: DioExceptionType.badResponse,
     );
   }
