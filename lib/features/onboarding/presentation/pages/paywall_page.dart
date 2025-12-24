@@ -22,7 +22,6 @@ abstract class _Constants {
   static const double benefitCardWidth = 150.0;
   static const double planTileBorderOpacity = 0.2;
   static const double planTileBackgroundOpacity = 0.1;
-  static const double badgeBackgroundOpacity = 0.12;
   static const double borderWidth = 1.5;
 }
 
@@ -283,56 +282,98 @@ class _PaywallPageState extends State<PaywallPage> {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(PlantRadii.x12),
-      child: Container(
-        padding: const EdgeInsets.all(PlantDimens.x16),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(PlantRadii.x12),
-          border: Border.all(
-            color: borderColor,
-            width: _Constants.borderWidth,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(PlantDimens.x16),
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(PlantRadii.x12),
+              border: Border.all(
+                color: borderColor,
+                width: _Constants.borderWidth,
+              ),
+            ),
+            child: Row(
+              children: [
+                _buildRadioButton(selected),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      PlantText(
+                        title,
+                        style: PlantTextStyles.title18Medium.copyWith(color: PlantColors.white),
+                      ),
+                      PlantText(
+                        subtitle,
+                        style: PlantTextStyles.body14Regular.copyWith(color: Colors.white70),
+                      ),
+                    ],
+                  ).paddingOnly(start: PlantDimens.x12),
+                ),
+              ],
+            ),
           ),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              selected ? Icons.radio_button_checked : Icons.radio_button_off,
-              color: selected ? PlantColors.primary : Colors.white70,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  PlantText(
-                    title,
-                    style: PlantTextStyles.title18Medium.copyWith(color: PlantColors.white),
-                  ),
-                  PlantText(
-                    subtitle,
-                    style: PlantTextStyles.body14Regular.copyWith(color: Colors.white70),
-                  ),
-                ],
-              ).paddingOnly(start: PlantDimens.x12),
-            ),
-            if (badgeText != null)
-              Container(
+          if (badgeText != null)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: PlantDimens.x12,
                   vertical: PlantDimens.x8,
                 ),
-                decoration: BoxDecoration(
-                  color: PlantColors.white.withOpacity(_Constants.badgeBackgroundOpacity),
-                  borderRadius: BorderRadius.circular(PlantRadii.x16),
+                decoration: const BoxDecoration(
+                  color: PlantColors.primary,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(PlantRadii.x16),
+                    bottomLeft: Radius.circular(PlantRadii.x16),
+                  ),
                 ),
                 child: PlantText(
                   badgeText,
                   style: PlantTextStyles.body12Regular.copyWith(color: PlantColors.white),
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
+  }
+
+  Widget _buildRadioButton(bool selected) {
+    if (selected) {
+      return Container(
+        width: PlantDimens.x24,
+        height: PlantDimens.x24,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: PlantColors.primary,
+        ),
+        child: Center(
+          child: Container(
+            width: PlantDimens.x8,
+            height: PlantDimens.x8,
+            decoration: const BoxDecoration(
+              color: PlantColors.white,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        width: PlantDimens.x24,
+        height: PlantDimens.x24,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: PlantColors.white.withOpacity(0.08),
+        
+        ),
+      );
+    }
   }
 
   Widget _buildCTA(BuildContext context) {
