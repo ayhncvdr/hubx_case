@@ -1,6 +1,6 @@
 part of 'plant_landing_bloc.dart';
 
-class PlantLandingState {
+class PlantLandingState extends Equatable {
   const PlantLandingState({this.currentIndex = 0});
 
   final int currentIndex;

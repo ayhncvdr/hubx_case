@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubx_case/features/home/domain/entities/category.dart';
 import 'package:hubx_case/features/home/domain/entities/question.dart';

@@ -1,6 +1,6 @@
 part of 'plant_landing_bloc.dart';
 
-sealed class PlantLandingEvent {
+sealed class PlantLandingEvent extends Equatable {
   const PlantLandingEvent();
 
   List<Object?> get props => [];

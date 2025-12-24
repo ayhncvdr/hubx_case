@@ -1,6 +1,6 @@
 part of 'home_bloc.dart';
 
-class HomeState {
+class HomeState extends Equatable{
   const HomeState({
     this.categories = const [],
     this.questions = const [],
