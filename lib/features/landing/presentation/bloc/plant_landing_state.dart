@@ -11,5 +11,6 @@ class PlantLandingState extends Equatable {
     );
   }
 
+  @override
   List<Object?> get props => [currentIndex];
 }
