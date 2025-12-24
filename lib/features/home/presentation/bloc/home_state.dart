@@ -25,7 +25,7 @@ class HomeState extends Equatable {
       categories: categories ?? this.categories,
       questions: questions ?? this.questions,
       isLoading: isLoading ?? this.isLoading,
-      error: error,
+      error: error ?? this.error,
     );
   }
 

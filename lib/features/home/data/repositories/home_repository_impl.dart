@@ -6,7 +6,8 @@ import 'package:hubx_case/features/home/domain/entities/question.dart';
 import 'package:hubx_case/features/home/domain/repositories/home_repository.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
-  HomeRepositoryImpl(this._remoteDataSource);
+  HomeRepositoryImpl({HomeRemoteDataSource? remoteDataSource})
+      : _remoteDataSource = remoteDataSource ?? HomeRemoteDataSourceImpl();
 
   final HomeRemoteDataSource _remoteDataSource;
 

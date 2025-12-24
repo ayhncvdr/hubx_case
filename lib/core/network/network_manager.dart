@@ -5,13 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:hubx_case/shared/utils/api_endpoints.dart';
 
 class NetworkManager {
-  NetworkManager({
+  NetworkManager._({
     Dio? dio,
     Duration connectTimeout = const Duration(seconds: 10),
     Duration receiveTimeout = const Duration(seconds: 20),
     Duration sendTimeout = const Duration(seconds: 20),
     bool enableLogging = true,
   }) : _dio = dio ?? _createDio(connectTimeout, receiveTimeout, sendTimeout, enableLogging);
+
+  static NetworkManager? _instance;
+
+  /// Singleton instance of NetworkManager
+  factory NetworkManager.instance() {
+    _instance ??= NetworkManager._();
+    return _instance!;
+  }
 
   final Dio _dio;
 

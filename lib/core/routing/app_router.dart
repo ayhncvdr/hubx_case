@@ -1,5 +1,11 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubx_case/core/storage/sp_helper.dart';
+import 'package:hubx_case/features/home/data/repositories/home_repository_impl.dart';
+import 'package:hubx_case/features/home/domain/usecases/get_categories_usecase.dart';
+import 'package:hubx_case/features/home/domain/usecases/get_questions_usecase.dart';
+import 'package:hubx_case/features/home/presentation/bloc/home_bloc.dart';
+import 'package:hubx_case/features/home/presentation/bloc/home_event.dart';
 import 'package:hubx_case/features/home/presentation/home_page.dart';
 import 'package:hubx_case/features/onboarding/presentation/pages/onboarding_page.dart';
 import 'package:hubx_case/features/onboarding/presentation/pages/paywall_page.dart';
@@ -25,7 +31,18 @@ class AppRouter {
       ),
       GoRoute(
         path: '/home',
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) {
+          final repository = HomeRepositoryImpl();
+          final homeBloc = HomeBloc(
+            getCategoriesUseCase: GetCategoriesUseCase(repository),
+            getQuestionsUseCase: GetQuestionsUseCase(repository),
+          )..add(const HomeEventLoadData());
+
+          return BlocProvider<HomeBloc>(
+            create: (context) => homeBloc,
+            child: const HomePage(),
+          );
+        },
       ),
     ],
     redirect: (context, state) async {

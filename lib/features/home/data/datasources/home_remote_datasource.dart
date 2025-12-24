@@ -9,7 +9,8 @@ abstract class HomeRemoteDataSource {
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
-  HomeRemoteDataSourceImpl(this._networkManager);
+  HomeRemoteDataSourceImpl({NetworkManager? networkManager})
+      : _networkManager = networkManager ?? NetworkManager.instance();
 
   final NetworkManager _networkManager;
 
