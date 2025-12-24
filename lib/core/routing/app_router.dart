@@ -56,12 +56,13 @@ class AppRouter {
       final completed = sp.get<bool>(SPKey.onboardingCompleted) ?? false;
       final location = state.uri.toString();
 
-      // If onboarding is completed, redirect away from welcome/onboarding/paywall pages
+      // If onboarding is completed, redirect away from welcome/onboarding pages
+      // Allow paywall access from home screen
       if (completed) {
-        if (location == '/' || location.startsWith('/onboarding') || location == '/paywall') {
+        if (location == '/' || location.startsWith('/onboarding')) {
           return '/home';
         }
-        // If already at home, allow it
+        // Allow paywall and home when onboarding is completed
         return null;
       }
 

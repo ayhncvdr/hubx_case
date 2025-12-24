@@ -21,67 +21,109 @@ abstract class _Constants {
   static const double benefitCardWidth = 150.0;
   static const double planTileBorderOpacity = 0.2;
   static const double planTileBackgroundOpacity = 0.1;
-  static const double badgeBackgroundOpacity = 0.12;
   static const double borderWidth = 1.5;
 }
 
-class PaywallPage extends StatelessWidget {
+class PaywallPage extends StatefulWidget {
   const PaywallPage({super.key});
+
+  @override
+  State<PaywallPage> createState() => _PaywallPageState();
+}
+
+class _PaywallPageState extends State<PaywallPage> {
+  bool _isClosing = false;
+
+  Future<void> _handleClose(BuildContext blocContext, bool isCompleted) async {
+    if (!blocContext.mounted) {
+      return;
+    }
+
+    if (isCompleted) {
+      if (blocContext.canPop()) {
+        blocContext.pop();
+      } else {
+        blocContext.go('/home');
+      }
+    } else {
+      // Not completed yet - mark as completed and navigate
+      if (!blocContext.mounted) {
+        return;
+      }
+      _isClosing = true;
+      blocContext.read<OnboardingBloc>().add(const OnboardingEventClosePaywall());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => OnboardingBloc(),
-      child: PlantScaffold(
-        body: DecoratedBox(
-          decoration: const BoxDecoration(
-            color: PlantColors.paywallBackground,
-          ),
-          child: BlocConsumer<OnboardingBloc, OnboardingState>(
-            listenWhen: (previous, current) => previous.completed != current.completed && current.completed,
-            listener: (context, state) {
-              // Navigate to home after onboarding is marked as completed
-              context.go('/home');
+      create: (_) => OnboardingBloc()..add(const OnboardingEventLoadStatus()),
+      child: BlocConsumer<OnboardingBloc, OnboardingState>(
+        listenWhen: (previous, current) => _isClosing && previous.completed != current.completed && current.completed,
+        listener: (context, state) {
+          // Navigate when onboarding is completed during this session
+          if (!mounted) {
+            return;
+          }
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/home');
+          }
+        },
+        builder: (context, state) {
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) async {
+              if (!didPop) {
+                await _handleClose(context, state.completed);
+              }
             },
-            builder: (context, state) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _buildHero(context),
-                          _buildBenefits()
-                              .paddingSymmetric(
-                                horizontal: PlantDimens.x20,
-                              )
-                              .paddingOnly(bottom: PlantDimens.x24),
-                          _buildPlanOptions(context, state)
-                              .paddingSymmetric(
-                                horizontal: PlantDimens.x20,
-                              )
-                              .paddingOnly(bottom: PlantDimens.x24),
-                          _buildCTA(context)
-                              .paddingSymmetric(
-                                horizontal: PlantDimens.x20,
-                              )
-                              .paddingOnly(bottom: PlantDimens.x20),
-                        ],
+            child: PlantScaffold(
+              body: DecoratedBox(
+                decoration: const BoxDecoration(
+                  color: PlantColors.paywallBackground,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _buildHero(context, state.completed),
+                            _buildBenefits()
+                                .paddingSymmetric(
+                                  horizontal: PlantDimens.x20,
+                                )
+                                .paddingOnly(bottom: PlantDimens.x24),
+                            _buildPlanOptions(context, state)
+                                .paddingSymmetric(
+                                  horizontal: PlantDimens.x20,
+                                )
+                                .paddingOnly(bottom: PlantDimens.x24),
+                            _buildCTA(context)
+                                .paddingSymmetric(
+                                  horizontal: PlantDimens.x20,
+                                )
+                                .paddingOnly(bottom: PlantDimens.x20),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildHero(BuildContext context) {
+  Widget _buildHero(BuildContext context, bool completed) {
     return Stack(
       children: [
         const PlantImage(
@@ -95,7 +137,7 @@ class PaywallPage extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(PlantRadii.x16),
             onTap: () {
-              context.read<OnboardingBloc>().add(const OnboardingEventClosePaywall());
+              _handleClose(context, completed);
             },
             child: Container(
               padding: const EdgeInsets.all(PlantDimens.x8),
@@ -239,56 +281,97 @@ class PaywallPage extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(PlantRadii.x12),
-      child: Container(
-        padding: const EdgeInsets.all(PlantDimens.x16),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(PlantRadii.x12),
-          border: Border.all(
-            color: borderColor,
-            width: _Constants.borderWidth,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(PlantDimens.x16),
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(PlantRadii.x12),
+              border: Border.all(
+                color: borderColor,
+                width: _Constants.borderWidth,
+              ),
+            ),
+            child: Row(
+              children: [
+                _buildRadioButton(selected),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      PlantText(
+                        title,
+                        style: PlantTextStyles.title18Medium.copyWith(color: PlantColors.white),
+                      ),
+                      PlantText(
+                        subtitle,
+                        style: PlantTextStyles.body14Regular.copyWith(color: Colors.white70),
+                      ),
+                    ],
+                  ).paddingOnly(start: PlantDimens.x12),
+                ),
+              ],
+            ),
           ),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              selected ? Icons.radio_button_checked : Icons.radio_button_off,
-              color: selected ? PlantColors.primary : Colors.white70,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  PlantText(
-                    title,
-                    style: PlantTextStyles.title18Medium.copyWith(color: PlantColors.white),
-                  ),
-                  PlantText(
-                    subtitle,
-                    style: PlantTextStyles.body14Regular.copyWith(color: Colors.white70),
-                  ),
-                ],
-              ).paddingOnly(start: PlantDimens.x12),
-            ),
-            if (badgeText != null)
-              Container(
+          if (badgeText != null)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: PlantDimens.x12,
                   vertical: PlantDimens.x8,
                 ),
-                decoration: BoxDecoration(
-                  color: PlantColors.white.withOpacity(_Constants.badgeBackgroundOpacity),
-                  borderRadius: BorderRadius.circular(PlantRadii.x16),
+                decoration: const BoxDecoration(
+                  color: PlantColors.primary,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(PlantRadii.x16),
+                    bottomLeft: Radius.circular(PlantRadii.x16),
+                  ),
                 ),
                 child: PlantText(
                   badgeText,
                   style: PlantTextStyles.body12Regular.copyWith(color: PlantColors.white),
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
+  }
+
+  Widget _buildRadioButton(bool selected) {
+    if (selected) {
+      return Container(
+        width: PlantDimens.x24,
+        height: PlantDimens.x24,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: PlantColors.primary,
+        ),
+        child: Center(
+          child: Container(
+            width: PlantDimens.x8,
+            height: PlantDimens.x8,
+            decoration: const BoxDecoration(
+              color: PlantColors.white,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        width: PlantDimens.x24,
+        height: PlantDimens.x24,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: PlantColors.white.withOpacity(0.08),
+        ),
+      );
+    }
   }
 
   Widget _buildCTA(BuildContext context) {

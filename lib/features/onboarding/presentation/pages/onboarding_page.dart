@@ -43,14 +43,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       child: PlantScaffold(
         body: DecoratedBox(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                PlantColors.backgroundSoft,
-                PlantColors.white,
-              ],
-            ),
+            color: PlantColors.primaryBackground,
           ),
           child: BlocConsumer<OnboardingBloc, OnboardingState>(
             listenWhen: (prev, next) => prev.currentPage != next.currentPage,

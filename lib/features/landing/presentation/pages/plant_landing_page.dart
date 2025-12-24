@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubx_case/core/theme/plant_colors.dart';
 import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/features/diagnose/presentation/diagnose_page.dart';
-import 'package:hubx_case/features/home/presentation/home_page.dart';
+import 'package:hubx_case/features/home/presentation/home_screen.dart';
 import 'package:hubx_case/features/landing/presentation/bloc/plant_landing_bloc.dart';
 import 'package:hubx_case/features/my_garden/presentation/my_garden_page.dart';
 import 'package:hubx_case/features/profile/presentation/profile_page.dart';
@@ -33,7 +33,7 @@ class _PlantLandingView extends StatelessWidget {
   const _PlantLandingView();
 
   static const _pages = [
-    HomePage(),
+    HomeScreen(),
     DiagnosePage(),
     MyGardenPage(),
     ProfilePage(),
@@ -153,7 +153,7 @@ class _PlantLandingView extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-           /* No action */
+            /* No action */
           },
           borderRadius: BorderRadius.circular(_Constants.floatingActionButtonRadius),
           child: Container(
