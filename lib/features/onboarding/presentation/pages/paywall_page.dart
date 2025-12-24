@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubx_case/core/theme/plant_colors.dart';
 import 'package:hubx_case/core/theme/plant_dimens.dart';
-import 'package:hubx_case/core/theme/plant_durations.dart';
 import 'package:hubx_case/core/theme/plant_radii.dart';
 import 'package:hubx_case/features/onboarding/presentation/bloc/onboarding_bloc.dart';
 import 'package:hubx_case/loc_generated/l.dart';
@@ -33,6 +32,8 @@ class PaywallPage extends StatefulWidget {
 }
 
 class _PaywallPageState extends State<PaywallPage> {
+  bool _isClosing = false;
+
   Future<void> _handleClose(BuildContext blocContext, bool isCompleted) async {
     if (!blocContext.mounted) {
       return;
@@ -52,19 +53,8 @@ class _PaywallPageState extends State<PaywallPage> {
       if (!blocContext.mounted) {
         return;
       }
+      _isClosing = true;
       blocContext.read<OnboardingBloc>().add(const OnboardingEventClosePaywall());
-
-      // Wait for the state to update, then navigate
-      await Future.delayed(PlantDurations.short);
-
-      if (!blocContext.mounted) {
-        return;
-      }
-      if (blocContext.canPop()) {
-        blocContext.pop();
-      } else {
-        blocContext.go('/home');
-      }
     }
   }
 
@@ -72,7 +62,19 @@ class _PaywallPageState extends State<PaywallPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => OnboardingBloc()..add(const OnboardingEventLoadStatus()),
-      child: BlocBuilder<OnboardingBloc, OnboardingState>(
+      child: BlocConsumer<OnboardingBloc, OnboardingState>(
+        listenWhen: (previous, current) => _isClosing && previous.completed != current.completed && current.completed,
+        listener: (context, state) {
+          // Navigate when onboarding is completed during this session
+          if (!mounted) {
+            return;
+          }
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go('/home');
+          }
+        },
         builder: (context, state) {
           return PopScope(
             canPop: false,
@@ -370,7 +372,6 @@ class _PaywallPageState extends State<PaywallPage> {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: PlantColors.white.withOpacity(0.08),
-        
         ),
       );
     }
