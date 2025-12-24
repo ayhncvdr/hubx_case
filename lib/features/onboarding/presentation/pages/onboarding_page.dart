@@ -111,7 +111,7 @@ Widget _buildSlide({
         fit: BoxFit.cover,
       ),
       Positioned(
-        top: PlantDimens.x24,
+        top: PlantDimens.x72,
         left: 0,
         right: 0,
         child: RichText(

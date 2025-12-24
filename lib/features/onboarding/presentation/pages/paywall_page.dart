@@ -132,7 +132,7 @@ class _PaywallPageState extends State<PaywallPage> {
           fit: BoxFit.fitWidth,
         ),
         Positioned(
-          top: PlantDimens.x12,
+          top: PlantDimens.x48,
           right: PlantDimens.x20,
           child: InkWell(
             borderRadius: BorderRadius.circular(PlantRadii.x16),

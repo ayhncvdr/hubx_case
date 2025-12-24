@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class PlantScaffold extends StatelessWidget {
   const PlantScaffold({
     required this.body,
-    this.useSafeArea = true,
+    this.useSafeArea = false,
     this.appBar,
     this.floatingActionButton,
     super.key,
