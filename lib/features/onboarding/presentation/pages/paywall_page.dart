@@ -40,9 +40,6 @@ class _PaywallPageState extends State<PaywallPage> {
     }
 
     if (isCompleted) {
-      if (!blocContext.mounted) {
-        return;
-      }
       if (blocContext.canPop()) {
         blocContext.pop();
       } else {
