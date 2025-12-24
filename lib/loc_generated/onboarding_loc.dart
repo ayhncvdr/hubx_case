@@ -146,4 +146,139 @@ class OnboardingLocalizationTable {
         return '';
     }
   }
+
+  String get paywallPremiumTitle {
+    switch (_languageCode) {
+      case 'en':
+        return 'PlantApp ';
+      default:
+        return 'PlantApp ';
+    }
+  }
+
+  String get paywallPremiumSubtitle {
+    switch (_languageCode) {
+      case 'en':
+        return 'Premium';
+      default:
+        return 'Premium';
+    }
+  }
+
+  String get paywallAccessFeatures {
+    switch (_languageCode) {
+      case 'en':
+        return 'Access All Features';
+      default:
+        return '';
+    }
+  }
+
+  String get paywallBenefitUnlimitedTitle {
+    switch (_languageCode) {
+      case 'en':
+        return 'Unlimited';
+      default:
+        return '';
+    }
+  }
+
+  String get paywallBenefitUnlimitedSubtitle {
+    switch (_languageCode) {
+      case 'en':
+        return 'Plant Identify';
+      default:
+        return '';
+    }
+  }
+
+  String get paywallBenefitFasterTitle {
+    switch (_languageCode) {
+      case 'en':
+        return 'Faster';
+      default:
+        return '';
+    }
+  }
+
+  String get paywallBenefitFasterSubtitle {
+    switch (_languageCode) {
+      case 'en':
+        return 'Process';
+      default:
+        return '';
+    }
+  }
+
+  String get paywallPlanMonthTitle {
+    switch (_languageCode) {
+      case 'en':
+        return '1 Month';
+      default:
+        return '';
+    }
+  }
+
+  String get paywallPlanMonthSubtitle {
+    switch (_languageCode) {
+      case 'en':
+        return '\$2.99/month, auto renewable';
+      default:
+        return '';
+    }
+  }
+
+  String get paywallPlanYearTitle {
+    switch (_languageCode) {
+      case 'en':
+        return '1 Year';
+      default:
+        return '';
+    }
+  }
+
+  String get paywallPlanYearSubtitle {
+    switch (_languageCode) {
+      case 'en':
+        return 'First 3 days free, then \$529,99/year';
+      default:
+        return '';
+    }
+  }
+
+  String get paywallPlanYearBadge {
+    switch (_languageCode) {
+      case 'en':
+        return 'Save 50%';
+      default:
+        return '';
+    }
+  }
+
+  String get paywallCtaButton {
+    switch (_languageCode) {
+      case 'en':
+        return 'Try free for 3 days';
+      default:
+        return '';
+    }
+  }
+
+  String get paywallCtaDisclaimer {
+    switch (_languageCode) {
+      case 'en':
+        return "After the 3-day free trial period you'll be charged \$274.99 per year unless you cancel before the trial expires. Yearly Subscription is Auto-Renewable";
+      default:
+        return '';
+    }
+  }
+
+  String get paywallFooter {
+    switch (_languageCode) {
+      case 'en':
+        return 'Terms  ·  Privacy  ·  Restore';
+      default:
+        return '';
+    }
+  }
 }

@@ -1,12 +1,15 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubx_case/core/storage/sp_helper.dart';
-import 'package:hubx_case/features/onboarding/presentation/bloc/onboarding_event.dart';
-import 'package:hubx_case/features/onboarding/presentation/bloc/onboarding_state.dart';
+
+part 'onboarding_event.dart';
+part 'onboarding_state.dart';
 
 class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   OnboardingBloc() : super(const OnboardingState()) {
     on<OnboardingEventChangePage>(_onPageChange);
     on<OnboardingEventClosePaywall>(_onClosePaywall);
+    on<OnboardingEventSelectPlan>(_onSelectPlan);
   }
 
   void _onPageChange(
@@ -27,5 +30,12 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     } catch (_) {
       emit(state.copyWith(completed: false));
     }
+  }
+
+  void _onSelectPlan(
+    OnboardingEventSelectPlan event,
+    Emitter<OnboardingState> emit,
+  ) {
+    emit(state.copyWith(selectedPlanIndex: event.planIndex));
   }
 }

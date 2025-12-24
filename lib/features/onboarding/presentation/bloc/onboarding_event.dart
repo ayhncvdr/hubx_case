@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'onboarding_bloc.dart';
 
 sealed class OnboardingEvent extends Equatable {
   const OnboardingEvent();
@@ -17,4 +17,12 @@ class OnboardingEventChangePage extends OnboardingEvent {
 
 class OnboardingEventClosePaywall extends OnboardingEvent {
   const OnboardingEventClosePaywall();
+}
+
+class OnboardingEventSelectPlan extends OnboardingEvent {
+  const OnboardingEventSelectPlan(this.planIndex);
+  final int planIndex;
+
+  @override
+  List<Object?> get props => [planIndex];
 }

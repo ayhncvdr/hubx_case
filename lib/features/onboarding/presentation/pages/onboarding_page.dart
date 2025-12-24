@@ -5,8 +5,6 @@ import 'package:hubx_case/core/theme/plant_colors.dart';
 import 'package:hubx_case/core/theme/plant_durations.dart';
 import 'package:hubx_case/core/theme/plant_spacing.dart';
 import 'package:hubx_case/features/onboarding/presentation/bloc/onboarding_bloc.dart';
-import 'package:hubx_case/features/onboarding/presentation/bloc/onboarding_event.dart';
-import 'package:hubx_case/features/onboarding/presentation/bloc/onboarding_state.dart';
 import 'package:hubx_case/loc_generated/l.dart';
 import 'package:hubx_case/shared/styles/plant_text_styles.dart';
 import 'package:hubx_case/shared/utils/plant_assets.dart';
