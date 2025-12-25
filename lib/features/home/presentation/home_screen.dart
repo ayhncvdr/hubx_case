@@ -40,8 +40,8 @@ class HomeScreen extends StatelessWidget {
           return const HomeLoadingView();
         }
 
-        if (state.error != null) {
-          return HomeErrorView(error: state.error!);
+        if (state.failure != null) {
+          return HomeErrorView(error: state.failure!.message);
         }
 
         return HomeSuccessView(questions: state.questions, categories: state.categories);

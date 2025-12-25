@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hubx_case/core/di/injection_container.dart';
 import 'package:hubx_case/core/theme/plant_color_extension.dart';
 import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/core/theme/plant_durations.dart';
@@ -39,7 +40,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => OnboardingBloc(),
+      create: (_) => getIt<OnboardingBloc>(),
       child: PlantScaffold(
         body: DecoratedBox(
           decoration: BoxDecoration(

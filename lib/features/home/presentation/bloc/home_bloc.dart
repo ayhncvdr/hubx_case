@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hubx_case/core/errors/failure.dart';
 import 'package:hubx_case/features/home/domain/entities/category.dart';
 import 'package:hubx_case/features/home/domain/entities/question.dart';
 import 'package:hubx_case/features/home/domain/usecases/get_categories_usecase.dart';
@@ -25,7 +26,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeEventLoadData event,
     Emitter<HomeState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isLoading: true, clearFailure: true));
 
     try {
       final categories = await _getCategoriesUseCase();
@@ -36,13 +37,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           categories: categories,
           questions: questions,
           isLoading: false,
+          clearFailure: true,
         ),
       );
     } catch (e) {
+      final failure = e is Failure ? e : UnknownFailure(e.toString());
       emit(
         state.copyWith(
           isLoading: false,
-          error: e.toString(),
+          failure: failure,
         ),
       );
     }
