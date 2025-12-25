@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hubx_case/core/theme/plant_colors.dart';
+import 'package:hubx_case/core/theme/plant_color_extension.dart';
 import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/core/theme/plant_durations.dart';
 import 'package:hubx_case/features/onboarding/presentation/bloc/onboarding_bloc.dart';
@@ -42,8 +42,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
       create: (_) => OnboardingBloc(),
       child: PlantScaffold(
         body: DecoratedBox(
-          decoration: const BoxDecoration(
-            color: PlantColors.primaryBackground,
+          decoration: BoxDecoration(
+            color: context.plantColors.primaryBackground,
           ),
           child: BlocConsumer<OnboardingBloc, OnboardingState>(
             listenWhen: (prev, next) => prev.currentPage != next.currentPage,
@@ -61,7 +61,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               children: [
                 Expanded(child: _buildPager(context, _pageController)),
                 _buildContinueButton(context, _pageController).paddingOnly(bottom: PlantDimens.x16),
-                _buildIndicator(state.currentPage).paddingOnly(bottom: PlantDimens.x48),
+                _buildIndicator(context, state.currentPage).paddingOnly(bottom: PlantDimens.x48),
               ],
             ).paddingSymmetric(horizontal: PlantDimens.x20),
           ),
@@ -119,16 +119,16 @@ Widget _buildSlide({
             children: [
               TextSpan(
                 text: titlePrefix,
-                style: PlantTextStyles.headline28Medium,
+                style: PlantTextStyles.headline28Medium(context),
               ),
               TextSpan(
                 text: titleHighlight,
-                style: PlantTextStyles.headline28ExtraBold,
+                style: PlantTextStyles.headline28ExtraBold(context),
               ),
               if (titleSuffix != null)
                 TextSpan(
                   text: titleSuffix,
-                  style: PlantTextStyles.headline28Medium,
+                  style: PlantTextStyles.headline28Medium(context),
                 ),
             ],
           ),
@@ -138,7 +138,8 @@ Widget _buildSlide({
   );
 }
 
-Widget _buildIndicator(int currentPage) {
+Widget _buildIndicator(BuildContext context, int currentPage) {
+  final colorScheme = Theme.of(context).colorScheme;
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: List.generate(
@@ -151,7 +152,7 @@ Widget _buildIndicator(int currentPage) {
           width: isActive ? _Constants.activeIndicatorSize : _Constants.inactiveIndicatorSize,
           height: isActive ? _Constants.activeIndicatorSize : _Constants.inactiveIndicatorSize,
           decoration: BoxDecoration(
-            color: isActive ? PlantColors.primaryText : PlantColors.carousel,
+            color: isActive ? colorScheme.onSurface : colorScheme.outlineVariant,
             shape: BoxShape.circle,
           ),
         );

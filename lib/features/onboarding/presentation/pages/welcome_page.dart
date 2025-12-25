@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hubx_case/core/theme/plant_colors.dart';
+import 'package:hubx_case/core/theme/plant_color_extension.dart';
 import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/loc_generated/l.dart';
 import 'package:hubx_case/shared/styles/plant_text_styles.dart';
@@ -18,8 +18,8 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlantScaffold(
       body: DecoratedBox(
-        decoration: const BoxDecoration(
-          color: PlantColors.primaryBackground,
+        decoration: BoxDecoration(
+          color: context.plantColors.primaryBackground,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -41,11 +41,11 @@ class WelcomePage extends StatelessWidget {
                             children: [
                               TextSpan(
                                 text: L.onboarding.welcomeTitlePrefix,
-                                style: PlantTextStyles.headline28Regular,
+                                style: PlantTextStyles.headline28Regular(context),
                               ),
                               TextSpan(
                                 text: L.onboarding.welcomeTitleHighlight,
-                                style: PlantTextStyles.headline28SemiBold,
+                                style: PlantTextStyles.headline28SemiBold(context),
                               ),
                             ],
                           ),
@@ -56,8 +56,8 @@ class WelcomePage extends StatelessWidget {
                         ),
                         PlantText(
                           L.onboarding.welcomeSubtitle,
-                          style: PlantTextStyles.body16Regular.copyWith(
-                            color: PlantColors.text2,
+                          style: PlantTextStyles.body16Regular(context).copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                         ).paddingOnly(
                           start: PlantDimens.x20,
@@ -78,32 +78,37 @@ class WelcomePage extends StatelessWidget {
                     context.go('/onboarding');
                   },
                 ).paddingOnly(bottom: PlantDimens.x16),
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: PlantTextStyles.body11Regular.copyWith(
-                      color: PlantColors.text3,
-                    ),
-                    children: [
-                      TextSpan(text: L.onboarding.termsPrefix),
-                      TextSpan(
-                        text: L.onboarding.termsOfUse,
-                        style: PlantTextStyles.body11Regular.copyWith(
-                          color: PlantColors.text3,
-                          decoration: TextDecoration.underline,
+                Builder(
+                  builder: (ctx) {
+                    final plantColors = ctx.plantColors;
+                    return RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: PlantTextStyles.body11Regular(context).copyWith(
+                          color: plantColors.text3,
                         ),
+                        children: [
+                          TextSpan(text: L.onboarding.termsPrefix),
+                          TextSpan(
+                            text: L.onboarding.termsOfUse,
+                            style: PlantTextStyles.body11Regular(context).copyWith(
+                              color: plantColors.text3,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                          TextSpan(text: L.onboarding.termsMiddle),
+                          TextSpan(
+                            text: L.onboarding.privacyPolicy,
+                            style: PlantTextStyles.body11Regular(context).copyWith(
+                              color: plantColors.text3,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                          TextSpan(text: L.onboarding.termsSuffix),
+                        ],
                       ),
-                      TextSpan(text: L.onboarding.termsMiddle),
-                      TextSpan(
-                        text: L.onboarding.privacyPolicy,
-                        style: PlantTextStyles.body11Regular.copyWith(
-                          color: PlantColors.text3,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                      TextSpan(text: L.onboarding.termsSuffix),
-                    ],
-                  ),
+                    );
+                  },
                 ).paddingOnly(
                   bottom: PlantDimens.x28,
                   start: PlantDimens.x24,

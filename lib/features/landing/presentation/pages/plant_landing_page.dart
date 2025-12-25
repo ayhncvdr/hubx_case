@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hubx_case/core/theme/plant_colors.dart';
+import 'package:hubx_case/core/theme/plant_color_extension.dart';
 import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/features/diagnose/presentation/diagnose_page.dart';
 import 'package:hubx_case/features/home/presentation/home_screen.dart';
@@ -39,14 +39,14 @@ class _PlantLandingView extends StatelessWidget {
     ProfilePage(),
   ];
 
-  static const _bottomNavDecoration = BoxDecoration(
-    color: PlantColors.white,
-    border: Border(
-      top: BorderSide(
-        color: PlantColors.bottomNavBorder,
-      ),
-    ),
-  );
+  BoxDecoration _bottomNavDecoration(BuildContext context) => BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        border: Border(
+          top: BorderSide(
+            color: context.plantColors.bottomNavBorder,
+          ),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +54,7 @@ class _PlantLandingView extends StatelessWidget {
       buildWhen: (previous, current) => previous.currentIndex != current.currentIndex,
       builder: (context, state) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           body: IndexedStack(
             index: state.currentIndex,
             children: _pages,
@@ -68,7 +69,7 @@ class _PlantLandingView extends StatelessWidget {
 
   Widget _buildBottomNavigationBar(BuildContext context, int currentIndex) {
     return Container(
-      decoration: _bottomNavDecoration,
+      decoration: _bottomNavDecoration(context),
       height: _Constants.bottomNavigationBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -115,7 +116,9 @@ class _PlantLandingView extends StatelessWidget {
     required int currentIndex,
   }) {
     final isSelected = index == currentIndex;
-    final color = isSelected ? PlantColors.primary : PlantColors.inactiveText;
+    final colorScheme = Theme.of(context).colorScheme;
+    final plantColors = context.plantColors;
+    final color = isSelected ? colorScheme.primary : plantColors.inactiveText;
 
     return Expanded(
       child: InkWell(
@@ -139,7 +142,7 @@ class _PlantLandingView extends StatelessWidget {
             ),
             PlantText(
               label,
-              style: PlantTextStyles.body11Regular.copyWith(color: color),
+              style: PlantTextStyles.body11Regular(context).copyWith(color: color),
             ).paddingOnly(top: PlantDimens.x4),
           ],
         ),
@@ -148,6 +151,7 @@ class _PlantLandingView extends StatelessWidget {
   }
 
   Widget _buildFloatingActionButton(BuildContext context) {
+    final plantColors = context.plantColors;
     return UnconstrainedBox(
       child: Material(
         color: Colors.transparent,
@@ -160,16 +164,16 @@ class _PlantLandingView extends StatelessWidget {
             padding: const EdgeInsets.all(PlantDimens.x20),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  PlantColors.fabGradientStart,
-                  PlantColors.fabGradientEnd,
+                  plantColors.fabGradientStart,
+                  plantColors.fabGradientEnd,
                 ],
               ),
               border: Border.all(
-                color: PlantColors.fabBorder,
+                color: plantColors.fabBorder,
                 width: PlantDimens.x4,
               ),
             ),

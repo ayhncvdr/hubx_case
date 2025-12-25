@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hubx_case/core/theme/plant_colors.dart';
+import 'package:hubx_case/core/theme/plant_color_extension.dart';
 import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/core/theme/plant_radii.dart';
 import 'package:hubx_case/features/onboarding/presentation/bloc/onboarding_bloc.dart';
@@ -82,8 +82,8 @@ class _PaywallPageState extends State<PaywallPage> {
             },
             child: PlantScaffold(
               body: DecoratedBox(
-                decoration: const BoxDecoration(
-                  color: PlantColors.paywallBackground,
+                decoration: BoxDecoration(
+                  color: context.plantColors.paywallBackground,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -139,13 +139,19 @@ class _PaywallPageState extends State<PaywallPage> {
             onTap: () {
               _handleClose(context, completed);
             },
-            child: Container(
-              padding: const EdgeInsets.all(PlantDimens.x8),
-              decoration: const BoxDecoration(
-                color: PlantColors.paywallCloseButtonBackground,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.close, color: PlantColors.white),
+            child: Builder(
+              builder: (ctx) {
+                final colorScheme = Theme.of(ctx).colorScheme;
+                final plantColors = ctx.plantColors;
+                return Container(
+                  padding: const EdgeInsets.all(PlantDimens.x8),
+                  decoration: BoxDecoration(
+                    color: plantColors.paywallCloseButtonBackground,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.close, color: colorScheme.surface),
+                );
+              },
             ),
           ),
         ),
@@ -156,23 +162,33 @@ class _PaywallPageState extends State<PaywallPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: L.onboarding.paywallPremiumTitle,
-                      style: PlantTextStyles.headline28SemiBold.copyWith(color: PlantColors.white),
+              Builder(
+                builder: (ctx) {
+                  final colorScheme = Theme.of(ctx).colorScheme;
+                  return RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: L.onboarding.paywallPremiumTitle,
+                          style: PlantTextStyles.headline28SemiBold(ctx).copyWith(color: colorScheme.surface),
+                        ),
+                        TextSpan(
+                          text: L.onboarding.paywallPremiumSubtitle,
+                          style: PlantTextStyles.headline28Regular(ctx).copyWith(color: colorScheme.surface),
+                        ),
+                      ],
                     ),
-                    TextSpan(
-                      text: L.onboarding.paywallPremiumSubtitle,
-                      style: PlantTextStyles.headline28Regular.copyWith(color: PlantColors.white),
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
-              PlantText(
-                L.onboarding.paywallAccessFeatures,
-                style: PlantTextStyles.title18Medium.copyWith(color: PlantColors.white),
+              Builder(
+                builder: (ctx) {
+                  final colorScheme = Theme.of(ctx).colorScheme;
+                  return PlantText(
+                    L.onboarding.paywallAccessFeatures,
+                    style: PlantTextStyles.title18Medium(ctx).copyWith(color: colorScheme.surface),
+                  );
+                },
               ),
             ],
           ),
@@ -211,39 +227,44 @@ class _PaywallPageState extends State<PaywallPage> {
     required String title,
     required String subtitle,
   }) {
-    return SizedBox(
-      width: _Constants.benefitCardWidth,
-      child: Container(
-        padding: const EdgeInsets.all(PlantDimens.x16),
-        decoration: BoxDecoration(
-          color: PlantColors.white.withOpacity(_Constants.benefitCardBackgroundOpacity),
-          borderRadius: BorderRadius.circular(PlantRadii.x12),
-          border: Border.all(
-            color: PlantColors.white.withOpacity(_Constants.benefitCardBorderOpacity),
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(PlantDimens.x8),
-              decoration: BoxDecoration(
-                color: PlantColors.white.withOpacity(_Constants.benefitCardIconBackgroundOpacity),
-                shape: BoxShape.circle,
+    return Builder(
+      builder: (context) {
+        final colorScheme = Theme.of(context).colorScheme;
+        return SizedBox(
+          width: _Constants.benefitCardWidth,
+          child: Container(
+            padding: const EdgeInsets.all(PlantDimens.x16),
+            decoration: BoxDecoration(
+              color: colorScheme.surface.withOpacity(_Constants.benefitCardBackgroundOpacity),
+              borderRadius: BorderRadius.circular(PlantRadii.x12),
+              border: Border.all(
+                color: colorScheme.surface.withOpacity(_Constants.benefitCardBorderOpacity),
               ),
-              child: Icon(icon, color: PlantColors.white),
             ),
-            PlantText(
-              title,
-              style: PlantTextStyles.title18Medium.copyWith(color: PlantColors.white),
-            ).paddingOnly(top: PlantDimens.x12),
-            PlantText(
-              subtitle,
-              style: PlantTextStyles.body14Regular.copyWith(color: Colors.white70),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(PlantDimens.x8),
+                  decoration: BoxDecoration(
+                    color: colorScheme.surface.withOpacity(_Constants.benefitCardIconBackgroundOpacity),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: colorScheme.surface),
+                ),
+                PlantText(
+                  title,
+                  style: PlantTextStyles.title18Medium(context).copyWith(color: colorScheme.surface),
+                ).paddingOnly(top: PlantDimens.x12),
+                PlantText(
+                  subtitle,
+                  style: PlantTextStyles.body14Regular(context).copyWith(color: Colors.white70),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -274,89 +295,95 @@ class _PaywallPageState extends State<PaywallPage> {
     required VoidCallback onTap,
     String? badgeText,
   }) {
-    final borderColor =
-        selected ? PlantColors.primary : PlantColors.white.withOpacity(_Constants.planTileBorderOpacity);
-    final bgColor =
-        selected ? PlantColors.primary.withOpacity(_Constants.planTileBackgroundOpacity) : Colors.transparent;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(PlantRadii.x12),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(PlantDimens.x16),
-            decoration: BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(PlantRadii.x12),
-              border: Border.all(
-                color: borderColor,
-                width: _Constants.borderWidth,
-              ),
-            ),
-            child: Row(
-              children: [
-                _buildRadioButton(selected),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      PlantText(
-                        title,
-                        style: PlantTextStyles.title18Medium.copyWith(color: PlantColors.white),
-                      ),
-                      PlantText(
-                        subtitle,
-                        style: PlantTextStyles.body14Regular.copyWith(color: Colors.white70),
-                      ),
-                    ],
-                  ).paddingOnly(start: PlantDimens.x12),
-                ),
-              ],
-            ),
-          ),
-          if (badgeText != null)
-            Positioned(
-              top: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: PlantDimens.x12,
-                  vertical: PlantDimens.x8,
-                ),
-                decoration: const BoxDecoration(
-                  color: PlantColors.primary,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(PlantRadii.x16),
-                    bottomLeft: Radius.circular(PlantRadii.x16),
+    return Builder(
+      builder: (context) {
+        final colorScheme = Theme.of(context).colorScheme;
+        final borderColor =
+            selected ? colorScheme.primary : colorScheme.surface.withOpacity(_Constants.planTileBorderOpacity);
+        final bgColor =
+            selected ? colorScheme.primary.withOpacity(_Constants.planTileBackgroundOpacity) : Colors.transparent;
+        return InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(PlantRadii.x12),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(PlantDimens.x16),
+                decoration: BoxDecoration(
+                  color: bgColor,
+                  borderRadius: BorderRadius.circular(PlantRadii.x12),
+                  border: Border.all(
+                    color: borderColor,
+                    width: _Constants.borderWidth,
                   ),
                 ),
-                child: PlantText(
-                  badgeText,
-                  style: PlantTextStyles.body12Regular.copyWith(color: PlantColors.white),
+                child: Row(
+                  children: [
+                    _buildRadioButton(context, selected),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          PlantText(
+                            title,
+                            style: PlantTextStyles.title18Medium(context).copyWith(color: colorScheme.surface),
+                          ),
+                          PlantText(
+                            subtitle,
+                            style: PlantTextStyles.body14Regular(context).copyWith(color: Colors.white70),
+                          ),
+                        ],
+                      ).paddingOnly(start: PlantDimens.x12),
+                    ),
+                  ],
                 ),
               ),
-            ),
-        ],
-      ),
+              if (badgeText != null)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: PlantDimens.x12,
+                      vertical: PlantDimens.x8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary,
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(PlantRadii.x16),
+                        bottomLeft: Radius.circular(PlantRadii.x16),
+                      ),
+                    ),
+                    child: PlantText(
+                      badgeText,
+                      style: PlantTextStyles.body12Regular(context).copyWith(color: colorScheme.surface),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildRadioButton(bool selected) {
+  Widget _buildRadioButton(BuildContext context, bool selected) {
+    final colorScheme = Theme.of(context).colorScheme;
     if (selected) {
       return Container(
         width: PlantDimens.x24,
         height: PlantDimens.x24,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: PlantColors.primary,
+          color: colorScheme.primary,
         ),
         child: Center(
           child: Container(
             width: PlantDimens.x8,
             height: PlantDimens.x8,
-            decoration: const BoxDecoration(
-              color: PlantColors.white,
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
               shape: BoxShape.circle,
             ),
           ),
@@ -368,7 +395,7 @@ class _PaywallPageState extends State<PaywallPage> {
         height: PlantDimens.x24,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: PlantColors.white.withOpacity(0.08),
+          color: colorScheme.surface.withOpacity(0.08),
         ),
       );
     }
@@ -386,12 +413,12 @@ class _PaywallPageState extends State<PaywallPage> {
         ).paddingOnly(bottom: PlantDimens.x8),
         PlantText(
           L.onboarding.paywallCtaDisclaimer,
-          style: PlantTextStyles.body11Regular.copyWith(color: Colors.white70),
+          style: PlantTextStyles.body11Regular(context).copyWith(color: Colors.white70),
           textAlign: TextAlign.center,
         ).paddingOnly(bottom: PlantDimens.x8),
         PlantText(
           L.onboarding.paywallFooter,
-          style: PlantTextStyles.body12Regular.copyWith(color: Colors.white70),
+          style: PlantTextStyles.body12Regular(context).copyWith(color: Colors.white70),
           textAlign: TextAlign.center,
         ).paddingOnly(bottom: PlantDimens.x12),
       ],
