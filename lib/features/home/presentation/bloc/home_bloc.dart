@@ -26,7 +26,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeEventLoadData event,
     Emitter<HomeState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isLoading: true, clearFailure: true));
 
     try {
       final categories = await _getCategoriesUseCase();
@@ -37,6 +37,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           categories: categories,
           questions: questions,
           isLoading: false,
+          clearFailure: true,
         ),
       );
     } catch (e) {

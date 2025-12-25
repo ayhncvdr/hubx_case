@@ -18,12 +18,13 @@ class HomeState extends Equatable {
     List<Question>? questions,
     bool? isLoading,
     Failure? failure,
+    bool clearFailure = false,
   }) {
     return HomeState(
       categories: categories ?? this.categories,
       questions: questions ?? this.questions,
       isLoading: isLoading ?? this.isLoading,
-      failure: failure ?? this.failure,
+      failure: clearFailure ? null : (failure ?? this.failure),
     );
   }
 
