@@ -1,0 +1,45 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "dependsOrder": "sequence",
+        "dependsOn": [
+          "dart: format",
+          "flutter: analyze"
+        ],
+        "label": "prelaunch: generate files and analyze"
+      },
+      {
+        "type": "flutter",
+        "command": "flutter",
+        "args": [
+          "analyze",
+          "--fatal-infos",
+          "--fatal-warnings"
+        ],
+        "group": "build",
+        "label": "flutter: analyze",
+        "presentation": {
+          "reveal": "never",
+          "revealProblems": "onProblem",
+          "close": true
+        }
+      },
+      {
+        "type": "dart",
+        "command": "dart",
+        "args": [
+          "format",
+          "--line-length=120",
+          "."
+        ],
+        "group": "build",
+        "label": "dart: format",
+        "presentation": {
+          "reveal": "silent",
+          "close": true
+        }
+      }
+    ]
+  }
+  
