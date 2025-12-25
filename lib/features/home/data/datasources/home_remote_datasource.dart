@@ -1,3 +1,5 @@
+import 'package:hubx_case/core/errors/failure.dart';
+import 'package:hubx_case/core/errors/network_exception_handler.dart';
 import 'package:hubx_case/core/network/network_manager.dart';
 import 'package:hubx_case/features/home/data/models/categories_model.dart';
 import 'package:hubx_case/features/home/data/models/question_model.dart';
@@ -9,8 +11,7 @@ abstract class HomeRemoteDataSource {
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
-  HomeRemoteDataSourceImpl({NetworkManager? networkManager})
-      : _networkManager = networkManager ?? NetworkManager.instance();
+  HomeRemoteDataSourceImpl({required NetworkManager networkManager}) : _networkManager = networkManager;
 
   final NetworkManager _networkManager;
 
@@ -19,11 +20,14 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
     try {
       final response = await _networkManager.getJson(ApiEndpoints.getCategories);
       if (response is! Map<String, dynamic>) {
-        throw Exception('Invalid response format: expected Map');
+        throw const ServerFailure('Invalid response format: expected Map');
       }
       return CategoriesModel.fromJson(response);
     } catch (e) {
-      throw Exception('Failed to fetch categories: $e');
+      if (e is Failure) {
+        rethrow;
+      }
+      throw NetworkExceptionHandler.handleException(e);
     }
   }
 
@@ -38,17 +42,20 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       } else if (response is Map<String, dynamic> && response['data'] is List) {
         questionsList = response['data'] as List;
       } else {
-        throw Exception('Invalid response format: expected List or Map with data field');
+        throw const ServerFailure('Invalid response format: expected List or Map with data field');
       }
 
       return questionsList.map((json) {
         if (json is! Map<String, dynamic>) {
-          throw Exception('Invalid question format: expected Map<String, dynamic>, got ${json.runtimeType}');
+          throw ServerFailure('Invalid question format: expected Map<String, dynamic>, got ${json.runtimeType}');
         }
         return QuestionModel.fromJson(json);
       }).toList();
     } catch (e) {
-      throw Exception('Failed to fetch questions: $e');
+      if (e is Failure) {
+        rethrow;
+      }
+      throw NetworkExceptionHandler.handleException(e);
     }
   }
 }

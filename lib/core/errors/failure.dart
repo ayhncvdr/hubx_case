@@ -16,3 +16,11 @@ class NetworkFailure extends Failure {
 class CacheFailure extends Failure {
   const CacheFailure([super.message = 'Cache error']);
 }
+
+class ServerFailure extends Failure {
+  const ServerFailure([super.message = 'Server error']);
+}
+
+class UnknownFailure extends Failure {
+  const UnknownFailure([super.message = 'An unexpected error occurred']);
+}

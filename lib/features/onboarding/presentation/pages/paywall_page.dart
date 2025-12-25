@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hubx_case/core/di/injection_container.dart';
 import 'package:hubx_case/core/theme/plant_color_extension.dart';
 import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/core/theme/plant_radii.dart';
@@ -58,7 +59,7 @@ class _PaywallPageState extends State<PaywallPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => OnboardingBloc()..add(const OnboardingEventLoadStatus()),
+      create: (_) => getIt<OnboardingBloc>()..add(const OnboardingEventLoadStatus()),
       child: BlocConsumer<OnboardingBloc, OnboardingState>(
         listenWhen: (previous, current) => _isClosing && previous.completed != current.completed && current.completed,
         listener: (context, state) {
