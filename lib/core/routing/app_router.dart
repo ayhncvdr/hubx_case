@@ -10,7 +10,9 @@ import 'package:hubx_case/features/onboarding/presentation/pages/paywall_page.da
 import 'package:hubx_case/features/onboarding/presentation/pages/welcome_page.dart';
 
 class AppRouter {
-  AppRouter();
+  AppRouter({required SPHelper spHelper}) : _spHelper = spHelper;
+
+  final SPHelper _spHelper;
 
   late final GoRouter router = GoRouter(
     initialLocation: '/',
@@ -45,8 +47,7 @@ class AppRouter {
       ),
     ],
     redirect: (context, state) async {
-      final sp = await SPHelper.instance();
-      final completed = sp.get<bool>(SPKey.onboardingCompleted) ?? false;
+      final completed = _spHelper.get<bool>(SPKey.onboardingCompleted) ?? false;
       final location = state.uri.toString();
 
       // If onboarding is completed, redirect away from welcome/onboarding pages

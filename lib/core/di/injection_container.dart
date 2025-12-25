@@ -18,7 +18,7 @@ Future<void> setupDependencyInjection() async {
 
   // Core
   getIt
-    ..registerLazySingleton<NetworkManager>(() => NetworkManager.instance())
+    ..registerLazySingleton<NetworkManager>(() => NetworkManager())
     ..registerSingleton<SPHelper>(spHelper)
     // Data Sources
     ..registerLazySingleton<HomeRemoteDataSource>(
@@ -39,5 +39,5 @@ Future<void> setupDependencyInjection() async {
       ),
     )
     ..registerFactory(() => PlantLandingBloc())
-    ..registerFactory(() => OnboardingBloc());
+    ..registerFactory(() => OnboardingBloc(spHelper: getIt()));
 }

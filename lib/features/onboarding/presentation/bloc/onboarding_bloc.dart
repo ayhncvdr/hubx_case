@@ -6,20 +6,23 @@ part 'onboarding_event.dart';
 part 'onboarding_state.dart';
 
 class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
-  OnboardingBloc() : super(const OnboardingState()) {
+  OnboardingBloc({required SPHelper spHelper})
+      : _spHelper = spHelper,
+        super(const OnboardingState()) {
     on<OnboardingEventLoadStatus>(_onLoadStatus);
     on<OnboardingEventChangePage>(_onPageChange);
     on<OnboardingEventClosePaywall>(_onClosePaywall);
     on<OnboardingEventSelectPlan>(_onSelectPlan);
   }
 
+  final SPHelper _spHelper;
+
   Future<void> _onLoadStatus(
     OnboardingEventLoadStatus event,
     Emitter<OnboardingState> emit,
   ) async {
     try {
-      final sp = await SPHelper.instance();
-      final completed = sp.get<bool>(SPKey.onboardingCompleted) ?? false;
+      final completed = _spHelper.get<bool>(SPKey.onboardingCompleted) ?? false;
       emit(state.copyWith(completed: completed));
     } catch (_) {
       emit(state.copyWith(completed: false));
@@ -38,8 +41,7 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     Emitter<OnboardingState> emit,
   ) async {
     try {
-      final sp = await SPHelper.instance();
-      await sp.set<bool>(SPKey.onboardingCompleted, true);
+      await _spHelper.set<bool>(SPKey.onboardingCompleted, true);
       emit(state.copyWith(completed: true));
     } catch (_) {
       emit(state.copyWith(completed: false));
