@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hubx_case/core/theme/color_schemes.dart';
+import 'package:hubx_case/core/theme/plant_color_extension.dart';
 import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/core/theme/plant_radii.dart';
 import 'package:hubx_case/core/theme/typography.dart';
@@ -13,6 +14,9 @@ class PlantTheme {
       colorScheme: scheme,
       useMaterial3: true,
       scaffoldBackgroundColor: scheme.surface,
+      extensions: const <ThemeExtension<dynamic>>[
+        PlantColorExtension.light,
+      ],
     );
 
     final textTheme = GoogleFonts.robotoTextTheme(base.textTheme);

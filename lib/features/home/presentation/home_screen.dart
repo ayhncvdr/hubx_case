@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hubx_case/core/theme/plant_colors.dart';
+import 'package:hubx_case/core/theme/plant_color_extension.dart';
 import 'package:hubx_case/core/theme/plant_dimens.dart';
 import 'package:hubx_case/core/theme/plant_radii.dart';
 import 'package:hubx_case/features/home/domain/entities/category.dart';
@@ -56,83 +56,88 @@ class HomeSuccessView extends StatelessWidget {
   final List<Question> questions;
   final List<Category> categories;
 
-  static const _bodyDecoration = BoxDecoration(
-    color: PlantColors.primaryBackground,
-  );
+  BoxDecoration _bodyDecoration(BuildContext context) => BoxDecoration(
+        color: context.plantColors.primaryBackground,
+      );
 
-  static const _bannerGradient = LinearGradient(
-    colors: [
-      PlantColors.bannerTextGradient1,
-      PlantColors.bannerTextGradient2,
-    ],
-  );
+  LinearGradient _bannerGradient(BuildContext context) => LinearGradient(
+        colors: [
+          Theme.of(context).colorScheme.secondaryContainer,
+          Theme.of(context).colorScheme.tertiary,
+        ],
+      );
 
-  static final _searchBarDecoration = BoxDecoration(
-    color: PlantColors.white,
-    borderRadius: BorderRadius.circular(PlantRadii.x12),
-    border: Border.all(
-      color: PlantColors.searchBorder,
-      width: 0.2,
-    ),
-  );
+  BoxDecoration _searchBarDecoration(BuildContext context) => BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(PlantRadii.x12),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline,
+          width: 0.2,
+        ),
+      );
 
-  static final _premiumBannerDecoration = BoxDecoration(
-    color: PlantColors.bannerBackground,
-    borderRadius: BorderRadius.circular(PlantRadii.x12),
-  );
+  BoxDecoration _premiumBannerDecoration(BuildContext context) => BoxDecoration(
+        color: Theme.of(context).colorScheme.secondary,
+        borderRadius: BorderRadius.circular(PlantRadii.x12),
+      );
 
-  static final _questionTitleDecoration = BoxDecoration(
-    color: PlantColors.questionTitleBackground,
-    border: Border.all(
-      color: PlantColors.questionTitleBorder,
-    ),
-    borderRadius: const BorderRadius.only(
-      bottomLeft: Radius.circular(PlantRadii.x12),
-      bottomRight: Radius.circular(PlantRadii.x12),
-    ),
-  );
+  BoxDecoration _questionTitleDecoration(BuildContext context) => BoxDecoration(
+        color: context.plantColors.questionTitleBackground,
+        border: Border.all(
+          color: context.plantColors.questionTitleBorder,
+        ),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(PlantRadii.x12),
+          bottomRight: Radius.circular(PlantRadii.x12),
+        ),
+      );
 
-  static final _categoryCardDecoration = BoxDecoration(
-    color: PlantColors.white,
-    borderRadius: BorderRadius.circular(PlantRadii.x12),
-    border: Border.all(
-      color: PlantColors.categoryCardBorder,
-      width: _Constants.categoryCardBorderWidth,
-    ),
-  );
+  BoxDecoration _categoryCardDecoration(BuildContext context) => BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(PlantRadii.x12),
+        border: Border.all(
+          color: context.plantColors.categoryCardBorder,
+          width: _Constants.categoryCardBorderWidth,
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
     return PlantScaffold(
-      body: DecoratedBox(
-        decoration: _bodyDecoration,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildHeader(),
-                    Column(
-                      children: [
-                        _buildPremiumBanner(context).paddingOnly(bottom: PlantDimens.x24),
-                        _buildQuestionsList(questions).paddingOnly(bottom: PlantDimens.x24),
-                        _buildCategoriesList(categories),
-                      ],
-                    ).paddingSymmetric(horizontal: PlantDimens.x20, vertical: PlantDimens.x24),
-                  ],
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: DecoratedBox(
+          decoration: _bodyDecoration(context),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildHeader(context),
+                      Column(
+                        children: [
+                          _buildPremiumBanner(context).paddingOnly(bottom: PlantDimens.x24),
+                          _buildQuestionsList(context, questions).paddingOnly(bottom: PlantDimens.x24),
+                          _buildCategoriesList(context, categories),
+                        ],
+                      ).paddingSymmetric(horizontal: PlantDimens.x20, vertical: PlantDimens.x24),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Stack(
       children: [
         const PlantImage(
@@ -148,8 +153,8 @@ class HomeSuccessView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildGreeting().paddingOnly(bottom: PlantDimens.x16),
-              _buildSearchBar(),
+              _buildGreeting(context).paddingOnly(bottom: PlantDimens.x16),
+              _buildSearchBar(context),
             ],
           ).paddingSymmetric(horizontal: PlantDimens.x20),
         ),
@@ -157,34 +162,35 @@ class HomeSuccessView extends StatelessWidget {
     );
   }
 
-  Widget _buildGreeting() {
+  Widget _buildGreeting(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         PlantText(
           L.home.greetingPrefix,
-          style: PlantTextStyles.body16Regular,
+          style: PlantTextStyles.body16Regular(context),
         ).paddingOnly(bottom: PlantDimens.x8),
         PlantText(
           L.home.greetingSuffix,
-          style: PlantTextStyles.headline24Medium,
+          style: PlantTextStyles.headline24Medium(context),
         ),
       ],
     );
   }
 
-  Widget _buildSearchBar() {
+  Widget _buildSearchBar(BuildContext context) {
+    final plantColors = context.plantColors;
     return DecoratedBox(
-      decoration: _searchBarDecoration,
+      decoration: _searchBarDecoration(context),
       child: TextField(
         decoration: InputDecoration(
           hintText: L.home.searchHint,
-          hintStyle: PlantTextStyles.body14Regular.copyWith(
-            color: PlantColors.searchHint,
+          hintStyle: PlantTextStyles.body14Regular(context).copyWith(
+            color: plantColors.searchHint,
           ),
-          prefixIcon: const Icon(
+          prefixIcon: Icon(
             Icons.search,
-            color: PlantColors.searchHint,
+            color: plantColors.searchHint,
             size: PlantDimens.x24,
           ),
           border: InputBorder.none,
@@ -193,19 +199,21 @@ class HomeSuccessView extends StatelessWidget {
             vertical: PlantDimens.x12,
           ),
         ),
-        style: PlantTextStyles.body14Regular,
+        style: PlantTextStyles.body14Regular(context),
       ),
     );
   }
 
   Widget _buildPremiumBanner(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final bannerGradient = _bannerGradient(context);
     return InkWell(
       onTap: () {
         context.push('/paywall');
       },
       borderRadius: BorderRadius.circular(PlantRadii.x12),
       child: DecoratedBox(
-        decoration: _premiumBannerDecoration,
+        decoration: _premiumBannerDecoration(context),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -221,18 +229,18 @@ class HomeSuccessView extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ShaderMask(
-                    shaderCallback: (bounds) => _bannerGradient.createShader(bounds),
+                    shaderCallback: (bounds) => bannerGradient.createShader(bounds),
                     child: PlantText(
                       L.home.premiumBannerTitle,
-                      style: PlantTextStyles.title16Medium.copyWith(
-                        color: PlantColors.white,
+                      style: PlantTextStyles.title16Medium(context).copyWith(
+                        color: colorScheme.surface,
                       ),
                     ),
                   ),
                   PlantText(
                     L.home.premiumBannerSubtitle,
-                    style: PlantTextStyles.body12Regular.copyWith(
-                      color: PlantColors.bannerTextGradient1,
+                    style: PlantTextStyles.body12Regular(context).copyWith(
+                      color: colorScheme.secondaryContainer,
                     ),
                   ),
                 ],
@@ -249,14 +257,14 @@ class HomeSuccessView extends StatelessWidget {
     );
   }
 
-  Widget _buildQuestionsList(List<Question> questions) {
+  Widget _buildQuestionsList(BuildContext context, List<Question> questions) {
     return SizedBox(
       height: _Constants.questionCardHeight,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: questions.length,
-        itemBuilder: (context, index) {
-          return _buildQuestionCard(questions[index]).paddingOnly(
+        itemBuilder: (ctx, index) {
+          return _buildQuestionCard(context, questions[index]).paddingOnly(
             end: index < questions.length - 1 ? PlantDimens.x12 : 0,
           );
         },
@@ -264,7 +272,8 @@ class HomeSuccessView extends StatelessWidget {
     );
   }
 
-  Widget _buildQuestionCard(Question question) {
+  Widget _buildQuestionCard(BuildContext context, Question question) {
+    final plantColors = context.plantColors;
     return InkWell(
       onTap: () {
         UrlLauncherHelper.launchQuestionUrl(question.uri);
@@ -278,9 +287,9 @@ class HomeSuccessView extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              _buildQuestionImage(question.imageUri),
-              Container(color: PlantColors.questionCardOverlay),
-              _buildQuestionTitle(question.title),
+              _buildQuestionImage(context, question.imageUri),
+              Container(color: plantColors.questionCardOverlay),
+              _buildQuestionTitle(context, question.title),
             ],
           ),
         ),
@@ -288,27 +297,29 @@ class HomeSuccessView extends StatelessWidget {
     );
   }
 
-  Widget _buildQuestionImage(String? imageUri) {
+  Widget _buildQuestionImage(BuildContext context, String? imageUri) {
+    final outlineColor = Theme.of(context).colorScheme.outline;
     if (imageUri != null) {
       return Image.network(
         imageUri,
         fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return Container(color: PlantColors.searchBorder);
+        errorBuilder: (ctx, error, stackTrace) {
+          return Container(color: outlineColor);
         },
       );
     }
-    return Container(color: PlantColors.searchBorder);
+    return Container(color: outlineColor);
   }
 
-  Widget _buildQuestionTitle(String? title) {
+  Widget _buildQuestionTitle(BuildContext context, String? title) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Positioned(
       left: 0,
       right: 0,
       bottom: 0,
       child: Container(
         height: _Constants.questionTitleContainerHeight,
-        decoration: _questionTitleDecoration,
+        decoration: _questionTitleDecoration(context),
         padding: const EdgeInsetsDirectional.symmetric(
           horizontal: PlantDimens.x12,
           vertical: PlantDimens.x8,
@@ -316,8 +327,8 @@ class HomeSuccessView extends StatelessWidget {
         child: title != null
             ? PlantText(
                 title,
-                style: PlantTextStyles.title16Medium.copyWith(
-                  color: PlantColors.white,
+                style: PlantTextStyles.title16Medium(context).copyWith(
+                  color: colorScheme.surface,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -327,7 +338,7 @@ class HomeSuccessView extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoriesList(List<Category> categories) {
+  Widget _buildCategoriesList(BuildContext context, List<Category> categories) {
     return GridView.builder(
       padding: EdgeInsetsDirectional.zero,
       shrinkWrap: true,
@@ -338,17 +349,18 @@ class HomeSuccessView extends StatelessWidget {
         mainAxisSpacing: _Constants.categoriesGridSpacing,
       ),
       itemCount: categories.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (ctx, index) {
         return SizedBox(
           width: _Constants.categoryCardSize,
           height: _Constants.categoryCardSize,
-          child: _buildCategoryCard(categories[index]),
+          child: _buildCategoryCard(context, categories[index]),
         );
       },
     );
   }
 
-  Widget _buildCategoryCard(Category category) {
+  Widget _buildCategoryCard(BuildContext context, Category category) {
+    final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: () {
         /* No operation */
@@ -358,14 +370,15 @@ class HomeSuccessView extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Container(
-            decoration: _categoryCardDecoration,
+            decoration: _categoryCardDecoration(context),
           ),
           ClipRRect(
             borderRadius: BorderRadius.circular(PlantRadii.x12 - _Constants.categoryCardBorderWidth),
             child: DecoratedBox(
-              decoration: const BoxDecoration(
-                color: PlantColors.white,
-                borderRadius: BorderRadius.all(Radius.circular(PlantRadii.x12 - _Constants.categoryCardBorderWidth)),
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                borderRadius:
+                    const BorderRadius.all(Radius.circular(PlantRadii.x12 - _Constants.categoryCardBorderWidth)),
               ),
               child: Stack(
                 fit: StackFit.expand,
@@ -374,7 +387,7 @@ class HomeSuccessView extends StatelessWidget {
                     Image.network(
                       category.image!.url!,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
+                      errorBuilder: (ctx, error, stackTrace) {
                         return const SizedBox.shrink();
                       },
                     ),
@@ -385,7 +398,7 @@ class HomeSuccessView extends StatelessWidget {
                       width: _Constants.categoryTitleContainerWidth,
                       child: PlantText(
                         category.title ?? '',
-                        style: PlantTextStyles.title16Medium,
+                        style: PlantTextStyles.title16Medium(context),
                         overflow: TextOverflow.visible,
                       ),
                     ),

@@ -65,4 +65,22 @@ class HomeLocalizationTable {
         return '';
     }
   }
+
+  String get errorMessage {
+    switch (_languageCode) {
+      case 'en':
+        return 'Something went wrong.\nPlease try again.';
+      default:
+        return '';
+    }
+  }
+
+  String get retry {
+    switch (_languageCode) {
+      case 'en':
+        return 'Retry';
+      default:
+        return '';
+    }
+  }
 }
